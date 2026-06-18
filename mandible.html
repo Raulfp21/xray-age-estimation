@@ -38,17 +38,22 @@ model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
 .pin:hover { background: #dc2626; transform: scale(1.2); transition: 0.1s; }
 
 /* Tables */
-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
 th { background: #334155; padding: 8px; text-align: left; font-weight: 600; font-size: 11px; border: 1px solid #1e293b; color: #f1f5f9; text-transform: uppercase; }
 td { border: 1px solid #334155; padding: 4px 6px; vertical-align: top; }
 .td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
+.td-label { font-weight: 600; color: #cbd5e1; vertical-align: middle; padding-left: 10px; }
 
 /* Inputs */
-input[type="text"], input[type="date"], select, textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 8px 10px; width: 100%; outline: none; transition: border-color 0.15s; }
+input[type="text"], input[type="date"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 8px 10px; width: 100%; outline: none; transition: border-color 0.15s; }
 td input[type="text"] { background: transparent; border: none; border-radius: 0; padding: 6px; }
 td input[type="text"]:focus { background: #1e293b; }
-input[type="text"]:focus, select:focus, textarea:focus { border-color: #3b82f6; }
-textarea { min-height: 50px; resize: vertical; }
+input[type="text"]:focus, textarea:focus { border-color: #3b82f6; }
+textarea { min-height: 70px; resize: vertical; }
+
+/* Conclusion Boxes */
+.conclusion-box { background: #0f172a; border: 1px dashed #3b82f6; border-radius: 6px; padding: 12px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+.conclusion-box label { font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase; }
 
 /* Buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; transition: all 0.15s; }
@@ -87,9 +92,10 @@ textarea { min-height: 50px; resize: vertical; }
   .card { border: 1px solid #ccc; background: #fff; break-inside: avoid; margin-bottom: 20px; }
   input[type="text"], input[type="date"], textarea { border: none !important; border-bottom: 1px solid #999 !important; background: transparent !important; color: #000 !important; border-radius: 0 !important; padding: 4px 0 !important; }
   .viewer-container, .btn-sm, .viva-group, .btn-primary, #instruction-box, .del-col { display: none !important; }
+  .conclusion-box { border: 1px solid #ccc; }
   th { background: #eee !important; color: #000 !important; border-color: #999 !important; }
   td { border-color: #999 !important; color: #000 !important; }
-  .td-center, .td-ref { color: #555 !important; }
+  .td-center, .td-label { color: #333 !important; }
 }
 </style>
 </head>
@@ -101,7 +107,7 @@ textarea { min-height: 50px; resize: vertical; }
     <div style="font-size:28px">💀</div>
     <div>
       <h1>Forensic Medicine — OSPE Practical Proforma</h1>
-      <p>Skeletal Remains: 3D Mandible Analysis, Sex Determination &amp; Age Estimation</p>
+      <p>Skeletal Remains: 3D Anatomy, Sex Determination &amp; Age Estimation</p>
     </div>
   </div>
 
@@ -118,7 +124,7 @@ textarea { min-height: 50px; resize: vertical; }
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 1</span> 3D Anatomical Identification</div>
     <div id="instruction-box" style="background:#1e3a8a; border:1px solid #3b82f6; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#bfdbfe;">
-      <strong>Instructions:</strong> Drag to rotate the bone. Scroll/Pinch to zoom. <strong>Click exactly on the bone surface to drop a pin.</strong> (Click a pin to delete it). The table below will automatically add a row for you to identify the part.
+      <strong>Instructions:</strong> Drag to rotate. Scroll/Pinch to zoom. <strong>Click exactly on the bone surface to drop a pin.</strong> (Click a pin to delete it). The table below will automatically update.
     </div>
     
     <div class="viewer-container">
@@ -138,14 +144,24 @@ textarea { min-height: 50px; resize: vertical; }
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 2</span> General Assessment</div>
     
-    <table id="general-table">
-      <colgroup><col style="width:40px"><col style="width:30%"><col style="width:35%"><col style="width:35%"><col class="del-col" style="width:30px"></colgroup>
-      <thead><tr><th class="td-center">S.No</th><th>Parameter / Step</th><th>Observation</th><th>Inference / Tests Used</th><th class="del-col"></th></tr></thead>
-      <tbody id="general-table-body">
-        <!-- Blank rows added via JS -->
+    <table>
+      <colgroup><col style="width:50px"><col style="width:35%"><col style="width:65%"></colgroup>
+      <thead><tr><th class="td-center">S.No</th><th>Parameter</th><th>Finding / Answer</th></tr></thead>
+      <tbody>
+        <tr><td class="td-center">1</td><td class="td-label">Bone or not</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">2</td><td class="td-label">Name of Bone / Bones</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">3</td><td class="td-label">Whether human or not</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">4</td><td class="td-label">Whether belong to one individual or more</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">5</td><td class="td-label">Age</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">6</td><td class="td-label">Sex</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">7</td><td class="td-label">Stature</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">8</td><td class="td-label">Race</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">9</td><td class="td-label">Identification</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">10</td><td class="td-label">Probable cause of death</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">11</td><td class="td-label">Probable time since death</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">12</td><td class="td-label">Manner of separation</td><td><input type="text" class="sel-ok"></td></tr>
       </tbody>
     </table>
-    <button class="btn btn-sm" onclick="addRow('general-table-body', 4)">＋ Add Row</button>
   </div>
 
   <!-- STEP 3: SEX DETERMINATION -->
@@ -154,18 +170,23 @@ textarea { min-height: 50px; resize: vertical; }
     
     <div class="viva-group">
       <span style="font-size:11px; color:#64748b; font-weight:600; padding: 4px 8px 0 0;">Test yourself:</span>
-      <button class="viva-btn" onclick="openViva('chin')">❓ Chin Shape Viva</button>
-      <button class="viva-btn" onclick="openViva('gonial')">❓ Gonial Angle Viva</button>
+      <button class="viva-btn" onclick="openViva('chin')">❓ Chin Shape</button>
+      <button class="viva-btn" onclick="openViva('gonial')">❓ Gonial Angle</button>
     </div>
 
     <table id="sex-table">
-      <colgroup><col style="width:40px"><col style="width:25%"><col style="width:20%"><col style="width:20%"><col style="width:35%"><col class="del-col" style="width:30px"></colgroup>
-      <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th>Your Observation</th><th class="del-col"></th></tr></thead>
+      <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
+      <thead><tr><th class="td-center">S.No</th><th>Trait</th><th>Male</th><th>Female</th><th class="del-col"></th></tr></thead>
       <tbody id="sex-table-body">
         <!-- Blank rows added via JS -->
       </tbody>
     </table>
-    <button class="btn btn-sm" onclick="addRow('sex-table-body', 5)">＋ Add Row</button>
+    <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
+
+    <div class="conclusion-box">
+      <label>Conclusion (Sex):</label>
+      <input type="text" class="sel-ok" placeholder="Type whether this belongs to male or female...">
+    </div>
   </div>
 
   <!-- STEP 4: AGE ESTIMATION -->
@@ -174,33 +195,32 @@ textarea { min-height: 50px; resize: vertical; }
     
     <div class="viva-group">
       <span style="font-size:11px; color:#64748b; font-weight:600; padding: 4px 8px 0 0;">Test yourself:</span>
-      <button class="viva-btn" onclick="openViva('age')">❓ Foramen Age Viva</button>
+      <button class="viva-btn" onclick="openViva('age')">❓ Foramen Position</button>
     </div>
 
     <table id="age-table">
-      <colgroup><col style="width:40px"><col style="width:30%"><col style="width:70%"><col class="del-col" style="width:30px"></colgroup>
-      <thead><tr><th class="td-center">S.No</th><th>Feature / Marker</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
+      <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
+      <thead><tr><th class="td-center">S.No</th><th>Trait / Feature</th><th>Observation</th><th class="del-col"></th></tr></thead>
       <tbody id="age-table-body">
         <!-- Blank rows added via JS -->
       </tbody>
     </table>
     <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
+
+    <div class="conclusion-box">
+      <label>Conclusion (Age):</label>
+      <input type="text" class="sel-ok" placeholder="Type the estimated age here...">
+    </div>
   </div>
 
-  <!-- STEP 5: FINAL OPINION -->
+  <!-- STEP 5: OPINION -->
   <div class="card">
-    <div class="card-title"><span class="step-badge">Step 5</span> Final Opinion</div>
-    <div style="display:flex; gap:16px; margin-bottom:12px;">
-      <div style="flex:1;"><label style="font-size:11px; color:#64748b; font-weight:700;">Final Sex Inference</label><input type="text" class="sel-ok" placeholder="e.g. Male"></div>
-      <div style="flex:1;"><label style="font-size:11px; color:#64748b; font-weight:700;">Final Age Range</label><input type="text" class="sel-ok" placeholder="e.g. 35 - 45 years"></div>
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px; color:#64748b; font-weight:700;">Reasoning / Remarks</label>
-      <textarea class="sel-ok" placeholder="Summarise your overall conclusion..."></textarea>
-    </div>
-    <div style="display:flex; gap:16px;">
-      <div style="flex:1;"><label style="font-size:11px; color:#64748b; font-weight:700;">Student Signature</label><input type="text" class="sel-ok"></div>
-      <div style="flex:1;"><label style="font-size:11px; color:#64748b; font-weight:700;">Faculty Signature</label><input type="text" class="sel-ok"></div>
+    <div class="card-title"><span class="step-badge">Step 5</span> Opinion</div>
+    <textarea class="sel-ok" placeholder="Enter your final medicolegal opinion here..."></textarea>
+    
+    <div style="display:flex; gap:16px; margin-top:16px;">
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase;">Student Signature</label><input type="text" class="sel-ok"></div>
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase;">Faculty Signature</label><input type="text" class="sel-ok"></div>
     </div>
   </div>
 
@@ -227,21 +247,17 @@ const anatomyBody = document.getElementById('anatomy-table-body');
 let pinCount = 0;
 
 modelViewer.addEventListener('click', (event) => {
-  // Prevent adding pins if they clicked an existing pin
   if (event.target.classList.contains('pin')) return;
 
-  // Crucial Fix: Use clientX and clientY directly as required by Model-Viewer API
   const hit = modelViewer.positionAndNormalFromPoint(event.clientX, event.clientY);
   
   if (hit != null) {
     pinCount++;
     const pinId = 'pin-' + pinCount;
 
-    // Remove empty state message
     const emptyRow = document.getElementById('empty-anatomy-row');
     if (emptyRow) emptyRow.remove();
 
-    // Create the Pin button
     const pin = document.createElement('button');
     pin.className = 'pin';
     pin.slot = 'hotspot-' + pinCount;
@@ -251,7 +267,6 @@ modelViewer.addEventListener('click', (event) => {
     pin.id = pinId;
     pin.title = "Click to remove this pin";
 
-    // Delete pin on click
     pin.onclick = (e) => {
       e.stopPropagation(); 
       pin.remove();
@@ -262,7 +277,6 @@ modelViewer.addEventListener('click', (event) => {
 
     modelViewer.appendChild(pin);
 
-    // Add row to anatomy table
     const tr = document.createElement('tr');
     tr.id = 'row-' + pinId;
     tr.innerHTML = `
@@ -278,11 +292,10 @@ function renumberAnatomy() {
   const rows = anatomyBody.querySelectorAll('tr[id^="row-pin-"]');
   if (rows.length === 0) {
     anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic; padding:12px;">Click on the 3D model to place a pin and add a row here.</td></tr>';
-    pinCount = 0; // reset counter if all deleted
+    pinCount = 0; 
   } else {
     rows.forEach((row, index) => {
       row.querySelector('.anatomy-num').innerText = index + 1;
-      // Also update the physical pin number on the 3D model
       const pinId = row.id.replace('row-', '');
       const pinEl = document.getElementById(pinId);
       if (pinEl) pinEl.innerText = index + 1;
@@ -321,11 +334,8 @@ function renumberTable(tbodyId) {
 
 // Initialize tables with a few blank rows
 window.onload = () => {
-  addRow('general-table-body', 4);
-  addRow('general-table-body', 4);
-  
-  addRow('sex-table-body', 5);
-  addRow('sex-table-body', 5);
+  addRow('sex-table-body', 4);
+  addRow('sex-table-body', 4);
   
   addRow('age-table-body', 3);
   addRow('age-table-body', 3);
