@@ -3,20 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSPE — 3D Mandible & Guided Proforma</title>
-<!-- Google's Model-Viewer Library for 3D -->
+<title>OSPE — 3D Mandible Sex & Age Estimation</title>
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; font-size: 13px; line-height: 1.5; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; font-size: 13px; line-height: 1.5; user-select: none; }
 .sel-ok { user-select: text; }
 .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
 
-/* Header & Cards */
+/* Header */
 .hdr { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
-.hdr h1 { font-size: 18px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
+.hdr h1 { font-size: 17px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
 .hdr p { font-size: 12px; color: #64748b; }
+.preview-badge { display: inline-block; background: #7c3aed; color: #ede9fe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+
+/* Timer */
+#timer-bar { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px 22px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+#timer-display { font-size: 26px; font-weight: 700; color: #4ade80; font-variant-numeric: tabular-nums; letter-spacing: 2px; }
+#timer-display.warn { color: #fbbf24; }
+#timer-display.danger { color: #ef4444; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+#timer-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; }
+.timer-track { flex: 1; height: 6px; background: #334155; border-radius: 999px; overflow: hidden; max-width: 300px; }
+#timer-fill { height: 100%; background: #4ade80; border-radius: 999px; transition: width 1s linear, background 1s; }
+
+/* Violation banner */
+#viol-banner { display: none; background: #7f1d1d; border: 1px solid #ef4444; border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #fca5a5; line-height: 1.6; }
+#viol-banner strong { color: #ef4444; display: block; margin-bottom: 2px; }
+#viol-overlay { display: none; position: fixed; inset: 0; background: rgba(127,29,29,0.6); z-index: 150; backdrop-filter: blur(2px); pointer-events: none; }
+
+/* Cards */
 .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
 .card-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
 .step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
@@ -27,9 +44,28 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #
 .field { display: flex; flex-direction: column; gap: 4px; }
 .field label { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
 
+/* Lock screen & Dashboard */
+#lock-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.96); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(4px); overflow-y:auto; padding:20px; }
+.lock-box { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px 36px; max-width: 460px; width: 100%; text-align: center; margin:auto; }
+.lock-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #f1f5f9; }
+.lock-box p { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+.lock-input { background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 16px; padding: 10px 14px; width: 100%; outline: none; text-align: center; letter-spacing: 2px; margin-bottom: 10px; }
+.lock-input:focus { border-color: #3b82f6; }
+#lock-error { font-size: 12px; color: #ef4444; margin-bottom: 8px; min-height: 16px; }
+.alert-box { background: #1e3a5f; border: 1px solid #1d4ed8; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #93c5fd; margin-bottom: 14px; text-align: left; line-height:1.5; }
+.tab-faculty { display: flex; gap: 0; margin-bottom: 20px; border: 1px solid #334155; border-radius: 8px; overflow: hidden; }
+.tab-btn { flex: 1; padding: 9px; font-size: 13px; border: none; background: transparent; color: #94a3b8; cursor: pointer; transition: all 0.15s; }
+.tab-btn.active { background: #2563eb; color: #fff; font-weight: 600; }
+.dash-section { border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #0f172a; }
+.dash-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; text-align: left; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+#gen-link-box { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; padding: 10px; border-radius: 6px; font-size: 11px; word-break: break-all; text-align: left; margin-top: 10px; display: none; }
+.copy-input { width: 100%; padding: 10px; margin-top: 8px; background: #0f172a; border: 1px dashed #34d399; color: #a7f3d0; border-radius: 4px; font-family: monospace; cursor: pointer; }
+
 /* 3D Viewer & Pins */
 .viewer-container { width: 100%; height: 450px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
-model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
+model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; --poster-color: transparent; }
+.mv-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 12px; background: #000; border-radius: 8px; flex-direction: column; gap: 8px; pointer-events: none; }
+.mv-error { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; color: #f87171; font-size: 12px; background: #000; border-radius: 8px; text-align: center; padding: 20px; flex-direction: column; gap: 6px; }
 .pin { background: #ef4444; border-radius: 50%; border: 2px solid #fff; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 0 2px rgba(239,68,68,0.4); }
 .pin:hover { background: #dc2626; transform: scale(1.2); transition: 0.1s; }
 
@@ -41,8 +77,9 @@ model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Inputs & Tables */
-input[type="text"], input[type="date"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 10px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
+input[type="text"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 10px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
 input[type="text"]:focus, textarea:focus { border-color: #3b82f6; background: #0f172a; }
+::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 textarea { min-height: 70px; resize: vertical; }
 
 table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin: 12px 0; }
@@ -56,7 +93,7 @@ td input[type="text"]:focus { background: #1e293b; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: #334155; }
 .btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 8px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
-.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; float: right; margin-top: 10px; }
+.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
 .viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
 .viva-btn:not(:disabled):hover { background: #6d28d9; transform: translateY(-1px); }
 .viva-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; opacity: 0.6; }
@@ -74,7 +111,6 @@ td input[type="text"]:focus { background: #1e293b; }
 .viva-a-title { font-size: 11px; color: #60a5fa; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
 .viva-a-text { font-size: 14px; color: #e2e8f0; line-height: 1.6; }
 
-/* Print */
 @media print {
   body { background: #fff; color: #000; padding: 0; }
   .page { max-width: 100%; padding: 0; margin: 0; }
@@ -82,27 +118,106 @@ td input[type="text"]:focus { background: #1e293b; }
   .hdr h1 { color: #000; }
   .card, .pf-item { border: 1px solid #ccc; background: #fff; break-inside: avoid; }
   input[type="text"], textarea { border: none !important; border-bottom: 1px dashed #999 !important; background: transparent !important; color: #000 !important; }
-  .viewer-container, .btn, .btn-sm, .viva-btn, .viva-hint, #instruction-box, .del-col { display: none !important; }
-  .pf-followup { display: block !important; border-top-color: #ccc; } 
+  .viewer-container, .btn, .btn-sm, .viva-btn, .viva-hint, #instruction-box, .del-col, #timer-bar, #lock-overlay { display: none !important; }
+  .pf-followup { display: block !important; border-top-color: #ccc; }
+  #snapshot-print { display: block !important; max-width: 380px; border: 1px solid #ccc; margin-bottom: 10px; }
 }
+#snapshot-print { display: none; }
 </style>
 </head>
 <body>
 
-<div class="page">
+<div id="viol-overlay"></div>
+
+<!-- LOCK SCREEN & DASHBOARD -->
+<div id="lock-overlay">
+  <div class="lock-box">
+    <div style="font-size:36px;margin-bottom:10px">💀</div>
+    <h2>OSPE — 3D Mandible Practical</h2>
+    <p>Skeletal Remains — Sex &amp; Age Estimation</p>
+
+    <div class="tab-faculty">
+      <button class="tab-btn active" onclick="switchTab('student')">Student</button>
+      <button class="tab-btn" onclick="switchTab('faculty')">Faculty</button>
+    </div>
+
+    <!-- STUDENT TAB -->
+    <div id="tab-student">
+      <div class="alert-box" id="time-alert-box">
+        Rotate, zoom and examine the 3D mandible. You have <strong>20 minutes</strong> once you begin.
+      </div>
+      <input class="lock-input" type="number" id="lock-roll" placeholder="Roll number (1 – 251)" min="1" max="251">
+      <div id="lock-error"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="unlockStudent()">Begin Assessment ➜</button>
+    </div>
+
+    <!-- FACULTY PIN TAB -->
+    <div id="tab-faculty" style="display:none">
+      <div class="alert-box">Enter faculty PIN to access the dashboard and generate scheduled exam links.</div>
+      <input class="lock-input" type="password" id="faculty-pin" placeholder="PIN" style="letter-spacing:4px; max-width:140px; margin:0 auto 10px auto; display:block; padding:8px; font-size:15px;">
+      <div id="faculty-error" style="font-size:12px;color:#ef4444;margin-bottom:8px;min-height:16px"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="loginFaculty()">Access Dashboard ➜</button>
+    </div>
+
+    <!-- FACULTY DASHBOARD TAB -->
+    <div id="tab-dashboard" style="display:none">
+      <div class="dash-section">
+        <div class="dash-title">📅 Schedule & Generate Link</div>
+        <p style="font-size:11px; color:#64748b; text-align:left; margin-bottom:12px;">Generate a URL that strictly limits when students can access the OSPE. Share this link on WhatsApp or Classroom.</p>
+        <div class="field-grid">
+          <div class="field">
+            <label>Start Time</label>
+            <input type="datetime-local" id="sched-start">
+          </div>
+          <div class="field">
+            <label>End Time</label>
+            <input type="datetime-local" id="sched-end">
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center" onclick="generateLink()">Generate & Copy Link 🔗</button>
+        <div id="gen-link-box"></div>
+      </div>
+
+      <div class="dash-section" style="margin-bottom:0">
+        <div class="dash-title">👁 Preview Assessment</div>
+        <div class="field" style="margin-bottom:10px;">
+          <input type="number" id="faculty-roll" placeholder="Enter Roll Number to preview (1-251)" min="1" max="251" class="lock-input" style="padding:10px; font-size:14px">
+        </div>
+        <button class="btn" style="width:100%; justify-content:center" onclick="unlockFaculty()">Preview Mandible as Faculty ➜</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="main-content" style="display:none">
   <div class="hdr">
     <div style="font-size:28px">💀</div>
     <div>
-      <h1>Forensic Medicine — OSPE Practical Proforma</h1>
+      <h1>Forensic Medicine — OSPE Practical Proforma<span id="preview-badge" class="preview-badge" style="display:none">FACULTY PREVIEW</span></h1>
       <p>Skeletal Remains: 3D Mandible Analysis, Sex &amp; Age Estimation</p>
     </div>
   </div>
 
+  <!-- TIMER -->
+  <div id="timer-bar">
+    <div>
+      <div id="timer-label">Time remaining</div>
+      <div id="timer-display">20:00</div>
+    </div>
+    <div class="timer-track"><div id="timer-fill" style="width:100%"></div></div>
+    <button class="btn btn-primary" onclick="finalizeSubmission()">🖨 Save as PDF</button>
+  </div>
+
+  <div id="viol-banner">
+    <strong>⚠ Academic integrity violation(s) detected — this will be recorded in your PDF</strong>
+    <span id="viol-list"></span>
+  </div>
+
   <div class="card">
     <div class="field-grid">
-      <div class="field"><label>Student Name</label><input type="text"></div>
-      <div class="field"><label>Roll Number</label><input type="text"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Student Name</label><input type="text" id="s-name" class="sel-ok"></div>
+      <div class="field"><label>Roll Number</label><input type="text" id="s-roll" readonly style="opacity:0.6"></div>
+      <div class="field"><label>Date</label><input type="date" id="s-date" class="sel-ok"></div>
     </div>
   </div>
 
@@ -112,9 +227,19 @@ td input[type="text"]:focus { background: #1e293b; }
     <div id="instruction-box" style="background:#1e3a8a; border:1px solid #3b82f6; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#bfdbfe;">
       <strong>Instructions:</strong> Drag to rotate. Scroll/Pinch to zoom. <strong>Click exactly on the bone surface to drop a pin.</strong>
     </div>
-    
+
     <div class="viewer-container">
-      <model-viewer id="mandible-model" src="mandible.glb" camera-controls interaction-prompt="zoom"></model-viewer>
+      <model-viewer id="mandible-model"
+        src="mandible.glb"
+        camera-controls
+        interaction-prompt="zoom"
+        shadow-intensity="1">
+        <div class="mv-loading" id="mv-loading">⟳ Loading 3D mandible model…</div>
+      </model-viewer>
+      <div class="mv-error" id="mv-error">
+        ⚠ Could not load the 3D model.<br>
+        <span style="font-size:11px;color:#94a3b8">Check that mandible.glb is published at the GitHub URL.</span>
+      </div>
     </div>
 
     <table id="anatomy-table">
@@ -124,13 +249,13 @@ td input[type="text"]:focus { background: #1e293b; }
         <tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic; padding:12px;">Click on the 3D model to place a pin.</td></tr>
       </tbody>
     </table>
+    <img id="snapshot-print" alt="3D mandible snapshot with pins">
   </div>
 
   <!-- STEP 2: GUIDED PROFORMA FLOW -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 2</span> Progressive 12-Point Assessment</div>
 
-    <!-- 1. Bone -->
     <div class="pf-item">
       <div class="pf-label">1. Is it a bone or not? <button id="btn-bone" class="viva-btn" onclick="openViva('bone')" disabled>❓ Viva</button></div>
       <input type="text" class="sel-ok" oninput="showFollowUp('fu-bone'); checkUnlock(this, 'btn-bone')">
@@ -140,13 +265,11 @@ td input[type="text"]:focus { background: #1e293b; }
       </div>
     </div>
 
-    <!-- 2. Name -->
     <div class="pf-item">
-      <div class="pf-label">2. Name of Bone(s)</div>
-      <input type="text" class="sel-ok">
+      <div class="pf-label">2. Name of Bone(s) <button id="btn-name" class="viva-btn" onclick="openViva('name')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-name')">
     </div>
 
-    <!-- 3. Human -->
     <div class="pf-item">
       <div class="pf-label">3. Whether human or not? <button id="btn-human" class="viva-btn" onclick="openViva('human')" disabled>❓ Viva</button></div>
       <input type="text" class="sel-ok" oninput="showFollowUp('fu-human'); checkUnlock(this, 'btn-human')">
@@ -156,19 +279,20 @@ td input[type="text"]:focus { background: #1e293b; }
       </div>
     </div>
 
-    <!-- 4. Number -->
     <div class="pf-item">
-      <div class="pf-label">4. Whether belonging to one individual or more?</div>
-      <input type="text" class="sel-ok">
+      <div class="pf-label">4. Whether belonging to one individual or more? <button id="btn-number" class="viva-btn" onclick="openViva('number')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-number')">
     </div>
 
-    <!-- 5. SEX DETERMINATION (Embedded Table) -->
+    <!-- 5. SEX DETERMINATION -->
     <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">5. Sex Determination 
-        <div style="display:flex; align-items:center; gap:6px;">
+      <div class="pf-label" style="color:#60a5fa;">5. Sex Determination
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
           <span class="viva-hint" id="hint-sex">Type conclusion to unlock ➜</span>
           <button id="btn-chin" class="viva-btn" onclick="openViva('chin')" disabled>❓ Chin Viva</button>
           <button id="btn-gonial" class="viva-btn" onclick="openViva('gonial')" disabled>❓ Gonial Angle Viva</button>
+          <button id="btn-ramus" class="viva-btn" onclick="openViva('ramus')" disabled>❓ Ramus Viva</button>
+          <button id="btn-tubercle" class="viva-btn" onclick="openViva('tubercle')" disabled>❓ Mental Tubercle Viva</button>
         </div>
       </div>
       <table id="sex-table">
@@ -179,16 +303,17 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
-        <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial'])">
+        <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial', 'btn-ramus', 'btn-tubercle'])">
       </div>
     </div>
 
-    <!-- 6. AGE ESTIMATION (Embedded Table) -->
+    <!-- 6. AGE ESTIMATION -->
     <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation 
-        <div style="display:flex; align-items:center; gap:6px;">
+      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
           <span class="viva-hint" id="hint-age">Type conclusion to unlock ➜</span>
           <button id="btn-age" class="viva-btn" onclick="openViva('age')" disabled>❓ Foramen Viva</button>
+          <button id="btn-thirdmolar" class="viva-btn" onclick="openViva('thirdmolar')" disabled>❓ Third Molar Viva</button>
         </div>
       </div>
       <table id="age-table">
@@ -199,30 +324,30 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
-        <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-age')">
+        <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-age','btn-thirdmolar'])">
       </div>
     </div>
 
-    <!-- 7, 8, 9, 10 -->
     <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok"></div>
     <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok"></div>
-    <div class="pf-item"><div class="pf-label">9. Specific Identification</div><input type="text" class="sel-ok"></div>
+    <div class="pf-item">
+      <div class="pf-label">9. Specific Identification <button id="btn-ident" class="viva-btn" onclick="openViva('ident')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-ident')">
+    </div>
     <div class="pf-item">
       <div class="pf-label">10. Probable Cause of Death <button id="btn-cod" class="viva-btn" onclick="openViva('cod')" disabled>❓ Viva</button></div>
       <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')">
     </div>
 
-    <!-- 11. Time Since Death -->
     <div class="pf-item">
-      <div class="pf-label">11. Probable Time Since Death</div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-time')">
+      <div class="pf-label">11. Probable Time Since Death <button id="btn-time" class="viva-btn" onclick="openViva('time')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-time'); checkUnlock(this, 'btn-time')">
       <div id="fu-time" class="pf-followup">
-        <div class="pf-followup-label">↳ Explain why this indicates a time of above 6 months?</div>
+        <div class="pf-followup-label">↳ Explain why this indicates this time since death</div>
         <input type="text" class="sel-ok">
       </div>
     </div>
 
-    <!-- 12. Separation -->
     <div class="pf-item">
       <div class="pf-label">12. Manner of Separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep')" disabled>❓ Viva</button></div>
       <input type="text" class="sel-ok" oninput="showFollowUp('fu-sep'); checkUnlock(this, 'btn-sep')">
@@ -231,22 +356,20 @@ td input[type="text"]:focus { background: #1e293b; }
         <input type="text" class="sel-ok">
       </div>
     </div>
-
   </div>
 
   <!-- STEP 3: OPINION -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 3</span> Final Opinion</div>
-    <textarea class="sel-ok"></textarea>
-    
+    <textarea class="sel-ok" id="final-opinion"></textarea>
     <div style="display:flex; gap:16px; margin-top:20px;">
       <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">STUDENT SIGNATURE</label><input type="text"></div>
       <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">FACULTY SIGNATURE</label><input type="text"></div>
     </div>
+    <div id="ts-bar" style="margin-top:16px;padding-top:12px;border-top:1px solid #334155;font-size:11px;color:#64748b;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"></div>
   </div>
 
-  <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
-
+  <button class="btn btn-primary" style="width:100%;padding:14px;justify-content:center" onclick="finalizeSubmission()">🖨 Finalize &amp; Save as PDF</button>
 </div>
 
 <!-- VIVA FLASHCARD MODAL -->
@@ -255,7 +378,6 @@ td input[type="text"]:focus { background: #1e293b; }
     <button class="close-modal" onclick="closeViva()">✕</button>
     <div id="viva-question" class="viva-q">Question text goes here?</div>
     <button id="btn-reveal" class="btn-reveal" onclick="revealAnswer()">Reveal Answer</button>
-    
     <div id="viva-answer-box" class="viva-answer-box">
       <div class="viva-a-title">Correct Answer:</div>
       <div id="viva-answer-text" class="viva-a-text"></div>
@@ -264,32 +386,263 @@ td input[type="text"]:focus { background: #1e293b; }
 </div>
 
 <script>
-// --- VIVA UNLOCK LOGIC ---
-function checkUnlock(inputElement, btnIds) {
-  const hasText = inputElement.value.trim().length > 0;
-  const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
-  
-  idsToUnlock.forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) btn.disabled = !hasText;
-  });
+const FACULTY_PIN = '2593';
+const EXAM_SECONDS = 20 * 60;
+let isFaculty = false;
+let startTime = null;
+let timerInterval = null;
+let secondsLeft = EXAM_SECONDS;
 
-  // Hide or show the hints based on input
-  if (idsToUnlock.includes('btn-chin')) {
-    const hint = document.getElementById('hint-sex');
-    if (hint) hint.style.display = hasText ? 'none' : 'inline';
+// URL Scheduling
+let enforcedStart = null;
+let enforcedEnd = null;
+
+// Violations
+let violations = [];
+let tabSwitchCount = 0, fsExitCount = 0, devtoolsCount = 0, devtoolsOpen = false;
+
+window.addEventListener('DOMContentLoaded', () => {
+  addRow('sex-table-body', 4); addRow('sex-table-body', 4);
+  addRow('age-table-body', 3); addRow('age-table-body', 3);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('start') && urlParams.has('end')) {
+    enforcedStart = new Date(parseInt(urlParams.get('start')));
+    enforcedEnd = new Date(parseInt(urlParams.get('end')));
+    
+    const alertBox = document.getElementById('time-alert-box');
+    if (alertBox) {
+      alertBox.innerHTML = `<strong>Scheduled Exam Window Active:</strong><br>
+      Opens: ${enforcedStart.toLocaleString('en-IN')}<br>
+      Closes: ${enforcedEnd.toLocaleString('en-IN')}<br><br>
+      You will have <strong>20 minutes</strong> to complete the OSPE once you log in.`;
+    }
   }
-  if (idsToUnlock.includes('btn-age')) {
-    const hint = document.getElementById('hint-age');
-    if (hint) hint.style.display = hasText ? 'none' : 'inline';
+});
+
+function timeStr() { return new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}); }
+function flashRed() { const ov = document.getElementById('viol-overlay'); ov.style.display = 'block'; setTimeout(() => { ov.style.display = 'none'; }, 600); }
+function logViolation(msg) {
+  violations.push(msg);
+  const banner = document.getElementById('viol-banner');
+  const list = document.getElementById('viol-list');
+  banner.style.display = 'block';
+  list.innerHTML = violations.map(v => '<br>• ' + v).join('');
+}
+
+window.addEventListener('beforeunload', function (e) {
+  if (!isFaculty && startTime && secondsLeft > 0) {
+    e.preventDefault();
+    e.returnValue = ''; 
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (isFaculty || !startTime) return;
+  if (document.hidden) {
+    tabSwitchCount++;
+    logViolation('Tab / window switch #' + tabSwitchCount + ' at ' + timeStr());
+    flashRed();
+  }
+});
+
+function requestFS() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+document.addEventListener('fullscreenchange', () => {
+  if (isFaculty || !startTime) return;
+  if (!document.fullscreenElement) {
+    fsExitCount++;
+    logViolation('Exited fullscreen #' + fsExitCount + ' at ' + timeStr());
+    flashRed();
+    setTimeout(requestFS, 800);
+  }
+});
+
+setInterval(() => {
+  if (isFaculty || !startTime) return;
+  const t = performance.now();
+  debugger;
+  const diff = performance.now() - t;
+  const open = diff > 80;
+  if (open && !devtoolsOpen) {
+    devtoolsOpen = true;
+    devtoolsCount++;
+    logViolation('DevTools opened #' + devtoolsCount + ' at ' + timeStr());
+    flashRed();
+  } else if (!open) { devtoolsOpen = false; }
+}, 1500);
+
+document.addEventListener('contextmenu', e => {
+  if (isFaculty) return;
+  if (e.target.tagName === 'IMG' || e.target.tagName === 'MODEL-VIEWER') { e.preventDefault(); return false; }
+});
+
+['copy','cut','paste'].forEach(ev => {
+  document.addEventListener(ev, e => {
+    if (isFaculty) return;
+    const tag = e.target.tagName;
+    if ((tag === 'TEXTAREA' || tag === 'INPUT')) {
+      if (!e.target.classList.contains('sel-ok')) {
+        e.preventDefault();
+      }
+    }
+  });
+});
+
+// --- FACULTY DASHBOARD LOGIC ---
+function switchTab(tab) {
+  document.getElementById('tab-student').style.display = tab === 'student' ? 'block' : 'none';
+  document.getElementById('tab-faculty').style.display = tab === 'faculty' ? 'block' : 'none';
+  document.getElementById('tab-dashboard').style.display = 'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0) === (tab==='student')));
+}
+
+function loginFaculty() {
+  const pin = document.getElementById('faculty-pin').value.trim();
+  const err = document.getElementById('faculty-error');
+  if (pin !== FACULTY_PIN) { err.textContent = 'Incorrect PIN.'; return; }
+  err.textContent = '';
+  document.getElementById('tab-faculty').style.display = 'none';
+  document.getElementById('tab-dashboard').style.display = 'block';
+  document.querySelectorAll('.tab-btn')[1].textContent = "Faculty Dashboard";
+}
+
+function fallbackCopyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.top = "0"; textArea.style.left = "0"; textArea.style.position = "fixed";
+  document.body.appendChild(textArea);
+  textArea.focus(); textArea.select();
+  try { return document.execCommand('copy'); } catch (err) { return false; } finally { document.body.removeChild(textArea); }
+}
+
+function generateLink() {
+  const sDate = document.getElementById('sched-start').value;
+  const eDate = document.getElementById('sched-end').value;
+  const box = document.getElementById('gen-link-box');
+  if (!sDate || !eDate) { showBoxError("⚠ Please select both a start and end time."); return; }
+  const sTime = new Date(sDate).getTime();
+  const eTime = new Date(eDate).getTime();
+  if (eTime <= sTime) { showBoxError("⚠ End time must be after start time."); return; }
+
+  const currentUrl = window.location.href.split('?')[0];
+  const finalUrl = `${currentUrl}?start=${sTime}&end=${eTime}`;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(finalUrl).then(() => showBoxSuccess(finalUrl))
+    .catch(err => { if (fallbackCopyTextToClipboard(finalUrl)) showBoxSuccess(finalUrl); else showBoxManual(finalUrl); });
+  } else {
+    if (fallbackCopyTextToClipboard(finalUrl)) showBoxSuccess(finalUrl); else showBoxManual(finalUrl);
+  }
+
+  function showBoxError(msg) {
+    box.style.display = 'block'; box.style.background = '#7f1d1d'; box.style.borderColor = '#ef4444'; box.style.color = '#fca5a5'; box.textContent = msg;
+  }
+  function showBoxSuccess(url) {
+    box.style.display = 'block'; box.style.background = '#064e3b'; box.style.borderColor = '#059669'; box.style.color = '#a7f3d0';
+    box.innerHTML = `<strong>✓ Copied to clipboard!</strong><br><br>Share this exact link with students:<br><br><input type="text" class="copy-input" value="${url}" readonly onclick="this.select()">`;
+  }
+  function showBoxManual(url) {
+    box.style.display = 'block'; box.style.background = '#1e3a8a'; box.style.borderColor = '#2563eb'; box.style.color = '#bfdbfe';
+    box.innerHTML = `<strong>Link generated!</strong> Auto-copy blocked by browser.<br><br>Click the box below and press Ctrl+C to copy manually:<br><br><input type="text" class="copy-input" style="border-color:#60a5fa" value="${url}" readonly onclick="this.select()">`;
   }
 }
 
-// --- 3D PIN LOGIC ---
+function checkTimeWindow(errEl) {
+  if (!enforcedStart || !enforcedEnd) return true; 
+  const now = new Date();
+  if (now < enforcedStart) {
+    errEl.textContent = 'Access Denied: The exam has not started yet. Opens at ' + enforcedStart.toLocaleTimeString('en-IN');
+    return false;
+  }
+  if (now > enforcedEnd) {
+    errEl.textContent = 'Access Denied: The exam window has concluded.';
+    return false;
+  }
+  return true;
+}
+
+function unlockStudent() {
+  const val = document.getElementById('lock-roll').value.trim();
+  const n = parseInt(val);
+  const err = document.getElementById('lock-error');
+  if (!val || isNaN(n) || n < 1 || n > 251) {
+    err.textContent = 'Please enter a valid roll number between 1 and 251.';
+    return;
+  }
+  if (!checkTimeWindow(err)) return;
+  if (localStorage.getItem('ospe_completed_mand_' + n)) {
+    err.textContent = 'Access Denied: You have already completed the exam on this device.';
+    return;
+  }
+  err.textContent = '';
+  isFaculty = false;
+  document.getElementById('s-roll').value = n;
+  localStorage.setItem('ospe_started_mand_' + n, 'true');
+  launch();
+  startTimer();
+  setTimeout(requestFS, 300);
+}
+
+function unlockFaculty() {
+  const val = document.getElementById('faculty-roll').value.trim();
+  const n = parseInt(val);
+  if (val && (isNaN(n) || n < 1 || n > 251)) { alert('Enter a valid roll number or leave blank.'); return; }
+  isFaculty = true;
+  document.getElementById('s-roll').value = val ? (n + ' (Faculty Preview)') : 'Faculty Preview';
+  document.getElementById('preview-badge').style.display = 'inline-block';
+  document.getElementById('timer-bar').style.opacity = '0.4';
+  document.getElementById('timer-label').textContent = 'Timer disabled (Faculty Preview)';
+  launch();
+}
+
+function launch() {
+  document.getElementById('lock-overlay').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+  const d = new Date();
+  document.getElementById('s-date').value = d.toISOString().slice(0,10);
+}
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(tickTimer, 1000);
+  tickTimer();
+}
+function tickTimer() {
+  secondsLeft = EXAM_SECONDS - Math.floor((Date.now() - startTime) / 1000);
+  if (secondsLeft < 0) secondsLeft = 0;
+  const m = Math.floor(secondsLeft / 60).toString().padStart(2,'0');
+  const s = (secondsLeft % 60).toString().padStart(2,'0');
+  const disp = document.getElementById('timer-display');
+  const fill = document.getElementById('timer-fill');
+  disp.textContent = m + ':' + s;
+  fill.style.width = (secondsLeft / EXAM_SECONDS * 100) + '%';
+  disp.className = secondsLeft <= 120 ? 'danger' : secondsLeft <= 300 ? 'warn' : '';
+  fill.style.background = secondsLeft <= 120 ? '#ef4444' : secondsLeft <= 300 ? '#fbbf24' : '#4ade80';
+  if (secondsLeft === 0) {
+    clearInterval(timerInterval);
+    logViolation('⏰ Time expired — exam ended at ' + timeStr());
+    if (!isFaculty) localStorage.setItem('ospe_completed_mand_' + document.getElementById('s-roll').value, 'true');
+    alert('Time is up! Please save your PDF immediately.');
+  }
+}
+
+// --- 3D MODEL LOADING STATE ---
 const modelViewer = document.getElementById('mandible-model');
+const mvLoading = document.getElementById('mv-loading');
+const mvError = document.getElementById('mv-error');
+modelViewer.addEventListener('load', () => { if (mvLoading) mvLoading.style.display = 'none'; });
+modelViewer.addEventListener('error', () => {
+  if (mvLoading) mvLoading.style.display = 'none';
+  mvError.style.display = 'flex';
+});
+
+// --- 3D PIN LOGIC ---
 const anatomyBody = document.getElementById('anatomy-table-body');
 let pinCount = 0;
-
 modelViewer.addEventListener('click', (event) => {
   if (event.target.classList.contains('pin')) return;
   const hit = modelViewer.positionAndNormalFromPoint(event.clientX, event.clientY);
@@ -298,27 +651,18 @@ modelViewer.addEventListener('click', (event) => {
     const pinId = 'pin-' + pinCount;
     const emptyRow = document.getElementById('empty-anatomy-row');
     if (emptyRow) emptyRow.remove();
-
     const pin = document.createElement('button');
-    pin.className = 'pin';
-    pin.slot = 'hotspot-' + pinCount;
-    pin.dataset.position = hit.position.toString();
-    pin.dataset.normal = hit.normal.toString();
-    pin.innerText = pinCount;
-    pin.id = pinId;
-
+    pin.className = 'pin'; pin.slot = 'hotspot-' + pinCount;
+    pin.dataset.position = hit.position.toString(); pin.dataset.normal = hit.normal.toString();
+    pin.innerText = pinCount; pin.id = pinId;
     pin.onclick = (e) => {
-      e.stopPropagation(); 
-      pin.remove();
+      e.stopPropagation(); pin.remove();
       const row = document.getElementById('row-' + pinId);
       if (row) row.remove();
       renumberAnatomy();
     };
-
     modelViewer.appendChild(pin);
-
-    const tr = document.createElement('tr');
-    tr.id = 'row-' + pinId;
+    const tr = document.createElement('tr'); tr.id = 'row-' + pinId;
     tr.innerHTML = `<td class="td-center anatomy-num">${pinCount}</td><td><input type="text" class="sel-ok"></td>`;
     anatomyBody.appendChild(tr);
     renumberAnatomy();
@@ -329,7 +673,7 @@ function renumberAnatomy() {
   const rows = anatomyBody.querySelectorAll('tr[id^="row-pin-"]');
   if (rows.length === 0) {
     anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic;">Click on the 3D model to place a pin.</td></tr>';
-    pinCount = 0; 
+    pinCount = 0;
   } else {
     rows.forEach((row, index) => {
       row.querySelector('.anatomy-num').innerText = index + 1;
@@ -340,73 +684,61 @@ function renumberAnatomy() {
   }
 }
 
-// --- DYNAMIC FOLLOW-UPS ---
 function showFollowUp(id) {
   const el = document.getElementById(id);
-  if(el && el.style.display !== 'block') {
-    el.style.display = 'block';
-  }
+  if (el && el.style.display !== 'block') el.style.display = 'block';
 }
 
-// --- DYNAMIC TABLES ---
 function addRow(tbodyId, cols) {
   const tbody = document.getElementById(tbodyId);
   const tr = document.createElement('tr');
   let html = `<td class="td-center row-num">${tbody.children.length + 1}</td>`;
-  for(let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok"></td>`;
+  for (let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok"></td>`;
   html += `<td class="del-col"><button class="del-btn" onclick="deleteRow(this, '${tbodyId}')" title="Remove row">✕</button></td>`;
-  tr.innerHTML = html;
-  tbody.appendChild(tr);
-  renumberTable(tbodyId);
+  tr.innerHTML = html; tbody.appendChild(tr); renumberTable(tbodyId);
 }
-
-function deleteRow(btn, tbodyId) {
-  btn.closest('tr').remove();
-  renumberTable(tbodyId);
-}
-
+function deleteRow(btn, tbodyId) { btn.closest('tr').remove(); renumberTable(tbodyId); }
 function renumberTable(tbodyId) {
   Array.from(document.getElementById(tbodyId).children).forEach((row, index) => {
     const numCell = row.querySelector('.row-num');
-    if(numCell) numCell.innerText = index + 1;
+    if (numCell) numCell.innerText = index + 1;
   });
 }
 
-window.onload = () => {
-  addRow('sex-table-body', 4); addRow('sex-table-body', 4);
-  addRow('age-table-body', 3); addRow('age-table-body', 3);
-};
-
-// --- VIVA QUESTION BANK (FLASHCARD STYLE) ---
-const vivaQuestions = {
-  bone: {
-    q: "How do you definitively confirm that a small, dirty fragment is actually a human bone and not a stone or piece of wood?",
-    a: "Anatomical shape and structure usually help. However, if it is a small fragment, histological examination under a microscope is the definitive test; true bone will reveal characteristic Haversian systems."
-  },
-  human: {
-    q: "If a bone is old and dry, how do you differentiate it from a non-human animal bone?",
-    a: "By microscopic examination. Non-human animal bones contain 'plexiform structures' in their cross-section, whereas human bones do not. They can also be distinguished by chemical analysis of bone-ash."
-  },
-  cod: {
-    q: "Can you easily determine the cause of death from a skeletonized body? What specific signs do you look for?",
-    a: "No, it cannot be made out easily unless there is evidence of fatal injury to a vital organ or blood vessel. You must look for marks of burning, deep weapon cuts, unhealed fractures, or traces of diatoms/heavy metals inside the bone marrow."
-  },
-  sep: {
-    q: "How do you differentiate the marks left by rodents from those left by carnivores (like dogs) on skeletal remains?",
-    a: "Rodents leave parallel grooves called 'chisel marks' due to gnawing. Carnivores cause heavy damage by gnawing the softer cancellous ends first, leaving distinct punctures, pits, and furrows."
-  },
-  gonial: {
-    q: "Describe the typical angle of the mandible (gonion) in males versus females.",
-    a: "In males, the angle is less obtuse (under 125°), prominent, and everted (flaring outward) due to strong masseter muscle pull. In females, it is more obtuse, not prominent, and inverted or straight."
-  },
-  chin: {
-    q: "Describe the difference in the shape of the chin (symphysis) between male and female mandibles.",
-    a: "The male chin typically has a broad, square, U-shaped appearance. The female chin is typically narrower, rounded, and has a V-shaped appearance."
-  },
-  age: {
-    q: "How does the position of the mental foramen change from infancy to old age?",
-    a: "In infancy, it opens near the lower margin of the mandible. In adults, it is located midway between the upper and lower margins. In old age, as teeth are lost and alveolar bone resorbs, it is situated near the upper (alveolar) margin."
+// --- VIVA UNLOCK LOGIC ---
+function checkUnlock(inputElement, btnIds) {
+  const hasText = inputElement.value.trim().length > 0;
+  const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
+  idsToUnlock.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.disabled = !hasText;
+  });
+  if (idsToUnlock.includes('btn-chin')) {
+    const hint = document.getElementById('hint-sex');
+    if (hint) hint.style.display = hasText ? 'none' : 'inline';
   }
+  if (idsToUnlock.includes('btn-age')) {
+    const hint = document.getElementById('hint-age');
+    if (hint) hint.style.display = hasText ? 'none' : 'inline';
+  }
+}
+
+// --- VIVA QUESTION BANK ---
+const vivaQuestions = {
+  bone: { q: "How do you definitively confirm that a small, dirty fragment is actually a human bone and not a stone or piece of wood?", a: "Anatomical shape and structure usually help. If it is a small or ambiguous fragment, histological examination is the definitive test — true bone reveals characteristic Haversian systems." },
+  name: { q: "What anatomical landmarks would you use to confirm this bone is a mandible and not any other bone?", a: "The mandible is identified by its horseshoe-shaped body with two vertical rami, the symphysis menti at the midline, the mental foramen on each side of the body, and the condyloid and coronoid processes." },
+  human: { q: "If a bone is old and dry, how do you differentiate it from a non-human animal bone?", a: "By microscopic examination. Non-human animal bones contain 'plexiform structures' in their cross-section, whereas human bones do not. They can also be distinguished by chemical analysis of bone-ash." },
+  number: { q: "If several mandibular fragments are found together, how would you determine if they belong to one individual or more?", a: "Reconstruct and check for disproportion in size or reduplication of parts. If the age, sex, and general morphology are consistent across all fragments with no duplication, they likely belong to one individual." },
+  chin: { q: "Describe the difference in the shape of the chin (symphysis menti) between male and female mandibles.", a: "The male chin typically has a broad, square (U-shaped) appearance. The female chin is typically narrower and rounded." },
+  gonial: { q: "Describe the typical angle of the mandible (gonion) in males versus females.", a: "In males, the gonial angle is less obtuse (under 125°), prominent, and everted (flares outward) due to strong masseter muscle pull. In females, it is more obtuse, not prominent, and inverted or straight." },
+  ramus: { q: "How does the breadth of the ascending ramus help distinguish male from female mandibles?", a: "The ascending ramus has greater breadth in males, reflecting the overall larger and more robust mandible. In females, the ramus is narrower." },
+  tubercle: { q: "What is the mental tubercle and how does it differ between sexes?", a: "The mental tubercle is a bony prominence near the chin. In males it is large and prominent due to stronger muscle attachment; in females it is insignificant or barely noticeable." },
+  age: { q: "How does the position of the mental foramen change from infancy to old age?", a: "In infancy, it opens near the lower margin. In adults, it is located midway between upper and lower margins. In old age, as teeth are lost and alveolar bone resorbs, it migrates near the upper (alveolar) margin." },
+  thirdmolar: { q: "What does full eruption of the third molar (wisdom tooth) tell you about minimum age?", a: "If the third molars are fully erupted, the individual is generally above 17 years of age." },
+  ident: { q: "Besides teeth, what other features on a mandible can help establish personal identity?", a: "Old healed fractures, surgical implants or plates, dental work visible on X-ray, unique pathology (cysts, tumours), and comparison with antemortem dental records." },
+  cod: { q: "Can you easily determine the cause of death from a skeletonized mandible alone? What specific signs do you look for?", a: "No, cause of death cannot usually be determined from the mandible alone unless there is evidence of fatal injury such as fracture, marks of burning, or deep weapon cuts." },
+  time: { q: "What gross features of bone help you estimate roughly how long ago death occurred?", a: "A fairly recent bone is slightly greasy, heavy, and may retain odor. Cartilage and ligaments can remain attached for 3–4 months or more. Ancient bone is dry, brittle, chalky, and light." },
+  sep: { q: "How do you differentiate rodent damage from carnivore damage on skeletal remains?", a: "Rodents leave characteristic parallel grooves called 'chisel marks' due to gnawing. Carnivores (dogs, foxes, wolves) cause heavier damage, leaving punctures, pits, and furrows." }
 };
 
 const modal = document.getElementById('viva-modal');
@@ -419,23 +751,53 @@ let currentTrait = '';
 function openViva(traitId) {
   currentTrait = traitId;
   qBox.innerText = vivaQuestions[traitId].q;
-  
-  // Reset modal state
   aBox.style.display = 'none';
   revealBtn.style.display = 'inline-block';
-  
   modal.style.display = 'flex';
 }
-
 function revealAnswer() {
   aText.innerText = vivaQuestions[currentTrait].a;
   revealBtn.style.display = 'none';
   aBox.style.display = 'block';
 }
+function closeViva() { modal.style.display = 'none'; }
 
-function closeViva() {
-  modal.style.display = 'none';
+// --- FINALIZE / SUBMIT with timestamp + violation record ---
+function finalizeSubmission() {
+  const name = document.getElementById('s-name').value.trim();
+  const roll = document.getElementById('s-roll').value.trim();
+  if (!isFaculty && !name) { alert('Please enter your name before submitting.'); return; }
+
+  const now = new Date();
+  const ts = now.toLocaleString('en-IN', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
+  const elapsed = startTime ? Math.floor((Date.now() - startTime) / 60000) : null;
+
+  if (!isFaculty) {
+    localStorage.setItem('ospe_completed_mand_' + roll, 'true');
+  }
+
+  const tsBar = document.getElementById('ts-bar');
+  let violText = '';
+  if (!isFaculty) {
+    violText = violations.length
+      ? `<span style="color:#fca5a5"><strong>⚠ ${violations.length} violation(s) recorded</strong></span>`
+      : `<span style="color:#86efac">✓ No integrity violations detected</span>`;
+  }
+  tsBar.innerHTML = `
+    <span><strong>Submission timestamp:</strong> ${ts}</span>
+    <span>Roll: ${roll} | Time taken: ${elapsed !== null ? elapsed + ' min' : 'N/A (Faculty)'}</span>
+    <span>${violText}</span>`;
+
+  try {
+    const dataUrl = modelViewer.toDataURL('image/png');
+    const imgEl = document.getElementById('snapshot-print');
+    imgEl.src = dataUrl;
+  } catch (e) {
+    console.warn('Could not capture 3D snapshot for print:', e);
+  }
+
+  setTimeout(() => window.print(), 200);
 }
 </script>
 </body>
-</html>
+        </html>
