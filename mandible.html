@@ -29,7 +29,7 @@ model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
 
 /* Proforma Flow Elements */
 .pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
-.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; }
+.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 .pf-followup { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #334155; animation: slideDown 0.3s ease-out; }
 .pf-followup-label { font-size: 12px; font-weight: 600; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -59,6 +59,13 @@ td input[type="text"]:focus { background: #1e293b; }
 #viva-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
 .viva-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px; position: relative; }
 .close-modal { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #64748b; font-size: 18px; cursor: pointer; }
+.viva-q { font-size: 14px; font-weight: 600; color: #f1f5f9; margin-bottom: 16px; line-height: 1.5; }
+.viva-opts { display: flex; flex-direction: column; gap: 8px; }
+.opt-btn { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 10px 14px; text-align: left; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+.opt-btn:hover { border-color: #3b82f6; }
+.viva-feedback { display: none; margin-top: 16px; padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.5; }
+.feedback-success { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; }
+.feedback-hint { background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5; }
 
 /* Print */
 @media print {
@@ -67,9 +74,12 @@ td input[type="text"]:focus { background: #1e293b; }
   .hdr { border-color: #ccc; background: #f8f9fa; }
   .hdr h1 { color: #000; }
   .card, .pf-item { border: 1px solid #ccc; background: #fff; break-inside: avoid; }
-  input[type="text"], textarea { border: none !important; border-bottom: 1px solid #999 !important; background: transparent !important; color: #000 !important; }
+  input[type="text"], textarea { border: none !important; border-bottom: 1px solid #999 !important; background: transparent !important; color: #000 !important; padding: 4px 0 !important; }
   .viewer-container, .btn, .btn-sm, .viva-btn, #instruction-box, .del-col { display: none !important; }
-  .pf-followup { display: block !important; border-top-color: #ccc; } /* Always show followups on print */
+  .pf-followup { display: block !important; border-top-color: #ccc; } 
+  th { background: #eee !important; color: #000 !important; border-color: #999 !important; }
+  td { border-color: #999 !important; color: #000 !important; }
+  .td-center { color: #333 !important; }
 }
 </style>
 </head>
@@ -86,8 +96,8 @@ td input[type="text"]:focus { background: #1e293b; }
 
   <div class="card">
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-      <div><label style="font-size:10px; color:#64748b; font-weight:600;">STUDENT NAME</label><input type="text"></div>
-      <div><label style="font-size:10px; color:#64748b; font-weight:600;">ROLL NUMBER</label><input type="text"></div>
+      <div><label style="font-size:10px; color:#64748b; font-weight:600;">STUDENT NAME</label><input type="text" value=""></div>
+      <div><label style="font-size:10px; color:#64748b; font-weight:600;">ROLL NUMBER</label><input type="text" value=""></div>
       <div><label style="font-size:10px; color:#64748b; font-weight:600;">DATE</label><input type="date"></div>
     </div>
   </div>
@@ -100,7 +110,6 @@ td input[type="text"]:focus { background: #1e293b; }
     </div>
     
     <div class="viewer-container">
-      <!-- Removed auto-rotate so it stays perfectly still -->
       <model-viewer id="mandible-model" src="mandible.glb" camera-controls interaction-prompt="zoom"></model-viewer>
     </div>
 
@@ -119,39 +128,44 @@ td input[type="text"]:focus { background: #1e293b; }
 
     <!-- 1. Bone -->
     <div class="pf-item">
-      <label class="pf-label">1. Is it a bone or not?</label>
-      <input type="text" class="sel-ok" placeholder="Enter finding..." onchange="showFollowUp('fu-bone')">
+      <div class="pf-label">1. Is it a bone or not? <button class="viva-btn" onclick="openViva('bone')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-bone')">
       <div id="fu-bone" class="pf-followup">
         <div class="pf-followup-label">↳ How do you prove this?</div>
-        <input type="text" class="sel-ok" placeholder="e.g. Presence of Haversian systems...">
+        <input type="text" class="sel-ok" value="">
       </div>
     </div>
 
     <!-- 2. Name -->
     <div class="pf-item">
-      <label class="pf-label">2. Name of Bone(s)</label>
-      <input type="text" class="sel-ok" placeholder="Identify the bone...">
+      <div class="pf-label">2. Name of Bone(s)</div>
+      <input type="text" class="sel-ok" value="">
     </div>
 
     <!-- 3. Human -->
     <div class="pf-item">
-      <label class="pf-label">3. Whether human or not?</label>
-      <input type="text" class="sel-ok" placeholder="Enter finding..." onchange="showFollowUp('fu-human')">
+      <div class="pf-label">3. Whether human or not? <button class="viva-btn" onclick="openViva('human')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-human')">
       <div id="fu-human" class="pf-followup">
         <div class="pf-followup-label">↳ How do you prove it is human?</div>
-        <input type="text" class="sel-ok" placeholder="e.g. Morphology, Precipitin test...">
+        <input type="text" class="sel-ok" value="">
       </div>
     </div>
 
     <!-- 4. Number -->
     <div class="pf-item">
-      <label class="pf-label">4. Whether belonging to one individual or more?</label>
-      <input type="text" class="sel-ok" placeholder="Enter finding...">
+      <div class="pf-label">4. Whether belonging to one individual or more?</div>
+      <input type="text" class="sel-ok" value="">
     </div>
 
     <!-- 5. SEX DETERMINATION (Embedded Table) -->
     <div class="pf-item" style="border-color: #3b82f6;">
-      <label class="pf-label" style="color:#60a5fa;">5. Sex Determination</label>
+      <div class="pf-label" style="color:#60a5fa;">5. Sex Determination 
+        <div style="display:flex; gap:6px;">
+          <button class="viva-btn" onclick="openViva('chin')">❓ Chin Viva</button>
+          <button class="viva-btn" onclick="openViva('gonial')">❓ Gonial Angle Viva</button>
+        </div>
+      </div>
       <table id="sex-table">
         <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
         <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th class="del-col"></th></tr></thead>
@@ -160,48 +174,48 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
-        <input type="text" class="sel-ok" placeholder="Type whether this belongs to a male or female...">
+        <input type="text" class="sel-ok" value="">
       </div>
     </div>
 
     <!-- 6. AGE ESTIMATION (Embedded Table) -->
     <div class="pf-item" style="border-color: #3b82f6;">
-      <label class="pf-label" style="color:#60a5fa;">6. Age Estimation</label>
+      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation <button class="viva-btn" onclick="openViva('age')">❓ Foramen Viva</button></div>
       <table id="age-table">
         <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
-        <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation / Score</th><th class="del-col"></th></tr></thead>
+        <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
         <tbody id="age-table-body"></tbody>
       </table>
       <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
-        <input type="text" class="sel-ok" placeholder="Type the estimated age here...">
+        <input type="text" class="sel-ok" value="">
       </div>
     </div>
 
     <!-- 7, 8, 9, 10 -->
-    <div class="pf-item"><label class="pf-label">7. Stature</label><input type="text" class="sel-ok" placeholder="N/A (Mandible is generally not used for stature)"></div>
-    <div class="pf-item"><label class="pf-label">8. Race</label><input type="text" class="sel-ok" placeholder="Enter findings if determinable..."></div>
-    <div class="pf-item"><label class="pf-label">9. Specific Identification</label><input type="text" class="sel-ok" placeholder="e.g. Dental records, deformities..."></div>
-    <div class="pf-item"><label class="pf-label">10. Probable Cause of Death</label><input type="text" class="sel-ok" placeholder="Enter findings..."></div>
+    <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok" value=""></div>
+    <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok" value=""></div>
+    <div class="pf-item"><div class="pf-label">9. Specific Identification</div><input type="text" class="sel-ok" value=""></div>
+    <div class="pf-item"><div class="pf-label">10. Probable Cause of Death</div><input type="text" class="sel-ok" value=""></div>
 
     <!-- 11. Time Since Death -->
     <div class="pf-item">
-      <label class="pf-label">11. Probable Time Since Death</label>
-      <input type="text" class="sel-ok" placeholder="Enter finding..." onchange="showFollowUp('fu-time')">
+      <div class="pf-label">11. Probable Time Since Death <button class="viva-btn" onclick="openViva('time')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-time')">
       <div id="fu-time" class="pf-followup">
         <div class="pf-followup-label">↳ Explain why this indicates a time of above 6 months?</div>
-        <input type="text" class="sel-ok" placeholder="e.g. Because it is a dry bone with no soft tissue attachments...">
+        <input type="text" class="sel-ok" value="">
       </div>
     </div>
 
     <!-- 12. Separation -->
     <div class="pf-item">
-      <label class="pf-label">12. Manner of Separation</label>
-      <input type="text" class="sel-ok" placeholder="Enter finding..." onchange="showFollowUp('fu-sep')">
+      <div class="pf-label">12. Manner of Separation <button class="viva-btn" onclick="openViva('sep')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-sep')">
       <div id="fu-sep" class="pf-followup">
         <div class="pf-followup-label">↳ How do you differentiate rodent damage from carnivore damage?</div>
-        <input type="text" class="sel-ok" placeholder="e.g. Rodents leave parallel chisel marks; carnivores leave punctures/pits...">
+        <input type="text" class="sel-ok" value="">
       </div>
     </div>
 
@@ -210,11 +224,11 @@ td input[type="text"]:focus { background: #1e293b; }
   <!-- STEP 3: OPINION -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 3</span> Final Opinion</div>
-    <textarea class="sel-ok" placeholder="Enter your final medicolegal opinion summarizing the profile..."></textarea>
+    <textarea class="sel-ok"></textarea>
     
     <div style="display:flex; gap:16px; margin-top:20px;">
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">STUDENT SIGNATURE</label><input type="text"></div>
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">FACULTY SIGNATURE</label><input type="text"></div>
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">STUDENT SIGNATURE</label><input type="text" value=""></div>
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">FACULTY SIGNATURE</label><input type="text" value=""></div>
     </div>
   </div>
 
@@ -257,7 +271,7 @@ modelViewer.addEventListener('click', (event) => {
 
     const tr = document.createElement('tr');
     tr.id = 'row-' + pinId;
-    tr.innerHTML = `<td class="td-center anatomy-num">${pinCount}</td><td><input type="text" class="sel-ok" placeholder="Identify this part..."></td>`;
+    tr.innerHTML = `<td class="td-center anatomy-num">${pinCount}</td><td><input type="text" class="sel-ok" value=""></td>`;
     anatomyBody.appendChild(tr);
     renumberAnatomy();
   }
@@ -289,7 +303,7 @@ function addRow(tbodyId, cols) {
   const tbody = document.getElementById(tbodyId);
   const tr = document.createElement('tr');
   let html = `<td class="td-center row-num">${tbody.children.length + 1}</td>`;
-  for(let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok" placeholder="..."></td>`;
+  for(let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok" value=""></td>`;
   html += `<td class="del-col"><button class="del-btn" onclick="deleteRow(this, '${tbodyId}')" title="Remove row">✕</button></td>`;
   tr.innerHTML = html;
   tbody.appendChild(tr);
@@ -312,6 +326,95 @@ window.onload = () => {
   addRow('sex-table-body', 4); addRow('sex-table-body', 4);
   addRow('age-table-body', 3); addRow('age-table-body', 3);
 };
+
+// --- VIVA QUESTION BANK (Sourced from K.S. Narayan Reddy Theory) ---
+const vivaQuestions = {
+  bone: {
+    q: "If a recovered specimen is very small, how can you definitively confirm it is bone and not a piece of wood or stone?",
+    options: [
+      { text: "By testing its specific gravity.", correct: false, feedback: "Incorrect. While bone has a specific gravity of 2, histological examination is the definitive test for small fragments." },
+      { text: "By subjecting it to histological examination.", correct: true, feedback: "Correct! Histological examination reveals the characteristic Haversian systems of human bone." }
+    ]
+  },
+  human: {
+    q: "Which microscopic feature is characteristic of non-human animal bones?",
+    options: [
+      { text: "Plexiform structures in cross-section.", correct: true, feedback: "Correct! Non-human bones contain plexiform structures, whereas human bones do not." },
+      { text: "Larger Haversian canals.", correct: false, feedback: "Incorrect. The presence of plexiform structures is the key microscopic differentiator between animal and human bones." }
+    ]
+  },
+  gonial: {
+    q: "Describe the gonial angle (angle of body and ramus) in a male mandible.",
+    options: [
+      { text: "More obtuse (over 125°), not prominent, and inverted.", correct: false, feedback: "Incorrect. That describes the female mandible." },
+      { text: "Less obtuse (under 125°), prominent, and everted.", correct: true, feedback: "Correct! The strong muscle attachments in males cause the angle to be less obtuse and everted (flaring outward)." }
+    ]
+  },
+  chin: {
+    q: "You view the chin (symphysis) from the front and it appears distinctly V-shaped and rounded. What is the likely sex?",
+    options: [
+      { text: "Male.", correct: false, feedback: "Incorrect. Males typically exhibit a broad, square, U-shaped chin." },
+      { text: "Female.", correct: true, feedback: "Correct! Females typically have a rounded, narrower, V-shaped chin compared to the broad, square male chin." }
+    ]
+  },
+  age: {
+    q: "If the mental foramen is located very close to the UPPER alveolar margin, what does this indicate about the individual's age?",
+    options: [
+      { text: "It is an infant mandible.", correct: false, feedback: "Incorrect. In infancy, the mental foramen opens near the LOWER margin." },
+      { text: "It is from an old-aged individual.", correct: true, feedback: "Correct! In old age, teeth are lost and the alveolar bone resorbs, leaving the foramen situated near the upper margin." }
+    ]
+  },
+  time: {
+    q: "If a bone is completely devoid of soft tissue, cartilage, and ligaments, and has lost the odour of decomposition, what is the minimum estimated time since death?",
+    options: [
+      { text: "More than 6 months.", correct: true, feedback: "Correct! Pieces of cartilage and ligaments usually remain attached for 3 to 4 months or more. Complete absence indicates >6 months." },
+      { text: "Less than 2 weeks.", correct: false, feedback: "Incorrect. Odour and soft tissues/cartilage persist for months." }
+    ]
+  },
+  sep: {
+    q: "How do the bite marks of rodents differ from those of carnivores (like dogs) on bone?",
+    options: [
+      { text: "Rodents swallow bones whole, while carnivores only leave 'fork-shaped' fractures.", correct: false, feedback: "Incorrect. Deer/sheep leave fork-shaped fragments." },
+      { text: "Rodents cause parallel 'chisel marks', while carnivores cause punctures, pits, and furrows.", correct: true, feedback: "Correct! Rodents gnaw creating parallel grooves, whereas carnivores puncture thin bones and attack cancellous ends." }
+    ]
+  }
+};
+
+const modal = document.getElementById('viva-modal');
+const qBox = document.getElementById('viva-question');
+const optsBox = document.getElementById('viva-options');
+const fbBox = document.getElementById('viva-feedback');
+
+function openViva(traitId) {
+  const data = vivaQuestions[traitId];
+  qBox.innerText = data.q;
+  optsBox.innerHTML = '';
+  fbBox.style.display = 'none';
+  fbBox.className = 'viva-feedback';
+
+  data.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerText = opt.text;
+    btn.onclick = () => {
+      fbBox.style.display = 'block';
+      fbBox.innerText = opt.feedback;
+      if (opt.correct) {
+        fbBox.classList.add('feedback-success');
+        fbBox.classList.remove('feedback-hint');
+      } else {
+        fbBox.classList.add('feedback-hint');
+        fbBox.classList.remove('feedback-success');
+      }
+    };
+    optsBox.appendChild(btn);
+  });
+  modal.style.display = 'flex';
+}
+
+function closeViva() {
+  modal.style.display = 'none';
+}
 </script>
 </body>
 </html>
