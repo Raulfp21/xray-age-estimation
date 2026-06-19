@@ -35,7 +35,7 @@ model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
 
 /* Proforma Flow Elements */
 .pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
-.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .pf-followup { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #334155; animation: slideDown 0.3s ease-out; }
 .pf-followup-label { font-size: 12px; font-weight: 600; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -52,13 +52,15 @@ td input[type="text"] { background: transparent; border: none; border-radius: 0;
 td input[type="text"]:focus { background: #1e293b; }
 .td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
 
-/* Buttons */
+/* Buttons & Viva Logic */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: #334155; }
 .btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 8px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
 .btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; float: right; margin-top: 10px; }
-.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 4px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
-.viva-btn:hover { background: #6d28d9; }
+.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+.viva-btn:not(:disabled):hover { background: #6d28d9; transform: translateY(-1px); }
+.viva-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; opacity: 0.6; }
+.viva-hint { font-size: 10px; color: #f59e0b; font-style: italic; margin-right: 4px; }
 .del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; padding: 6px 0; }
 
 /* Flashcard Modal */
@@ -80,7 +82,7 @@ td input[type="text"]:focus { background: #1e293b; }
   .hdr h1 { color: #000; }
   .card, .pf-item { border: 1px solid #ccc; background: #fff; break-inside: avoid; }
   input[type="text"], textarea { border: none !important; border-bottom: 1px dashed #999 !important; background: transparent !important; color: #000 !important; }
-  .viewer-container, .btn, .btn-sm, .viva-btn, #instruction-box, .del-col { display: none !important; }
+  .viewer-container, .btn, .btn-sm, .viva-btn, .viva-hint, #instruction-box, .del-col { display: none !important; }
   .pf-followup { display: block !important; border-top-color: #ccc; } 
 }
 </style>
@@ -130,8 +132,8 @@ td input[type="text"]:focus { background: #1e293b; }
 
     <!-- 1. Bone -->
     <div class="pf-item">
-      <div class="pf-label">1. Is it a bone or not? <button class="viva-btn" onclick="openViva('bone')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-bone')">
+      <div class="pf-label">1. Is it a bone or not? <button id="btn-bone" class="viva-btn" onclick="openViva('bone')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-bone'); checkUnlock(this, 'btn-bone')">
       <div id="fu-bone" class="pf-followup">
         <div class="pf-followup-label">↳ How do you prove this?</div>
         <input type="text" class="sel-ok">
@@ -146,8 +148,8 @@ td input[type="text"]:focus { background: #1e293b; }
 
     <!-- 3. Human -->
     <div class="pf-item">
-      <div class="pf-label">3. Whether human or not? <button class="viva-btn" onclick="openViva('human')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-human')">
+      <div class="pf-label">3. Whether human or not? <button id="btn-human" class="viva-btn" onclick="openViva('human')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-human'); checkUnlock(this, 'btn-human')">
       <div id="fu-human" class="pf-followup">
         <div class="pf-followup-label">↳ How do you prove it is human?</div>
         <input type="text" class="sel-ok">
@@ -163,9 +165,10 @@ td input[type="text"]:focus { background: #1e293b; }
     <!-- 5. SEX DETERMINATION (Embedded Table) -->
     <div class="pf-item" style="border-color: #3b82f6;">
       <div class="pf-label" style="color:#60a5fa;">5. Sex Determination 
-        <div style="display:flex; gap:6px;">
-          <button class="viva-btn" onclick="openViva('chin')">❓ Chin Viva</button>
-          <button class="viva-btn" onclick="openViva('gonial')">❓ Gonial Angle Viva</button>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="viva-hint" id="hint-sex">Type conclusion to unlock ➜</span>
+          <button id="btn-chin" class="viva-btn" onclick="openViva('chin')" disabled>❓ Chin Viva</button>
+          <button id="btn-gonial" class="viva-btn" onclick="openViva('gonial')" disabled>❓ Gonial Angle Viva</button>
         </div>
       </div>
       <table id="sex-table">
@@ -176,13 +179,18 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
-        <input type="text" class="sel-ok">
+        <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial'])">
       </div>
     </div>
 
     <!-- 6. AGE ESTIMATION (Embedded Table) -->
     <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation <button class="viva-btn" onclick="openViva('age')">❓ Foramen Viva</button></div>
+      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation 
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="viva-hint" id="hint-age">Type conclusion to unlock ➜</span>
+          <button id="btn-age" class="viva-btn" onclick="openViva('age')" disabled>❓ Foramen Viva</button>
+        </div>
+      </div>
       <table id="age-table">
         <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
         <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
@@ -191,7 +199,7 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
-        <input type="text" class="sel-ok">
+        <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-age')">
       </div>
     </div>
 
@@ -199,7 +207,10 @@ td input[type="text"]:focus { background: #1e293b; }
     <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok"></div>
     <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok"></div>
     <div class="pf-item"><div class="pf-label">9. Specific Identification</div><input type="text" class="sel-ok"></div>
-    <div class="pf-item"><div class="pf-label">10. Probable Cause of Death <button class="viva-btn" onclick="openViva('cod')">❓ Viva</button></div><input type="text" class="sel-ok"></div>
+    <div class="pf-item">
+      <div class="pf-label">10. Probable Cause of Death <button id="btn-cod" class="viva-btn" onclick="openViva('cod')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')">
+    </div>
 
     <!-- 11. Time Since Death -->
     <div class="pf-item">
@@ -213,8 +224,8 @@ td input[type="text"]:focus { background: #1e293b; }
 
     <!-- 12. Separation -->
     <div class="pf-item">
-      <div class="pf-label">12. Manner of Separation <button class="viva-btn" onclick="openViva('sep')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-sep')">
+      <div class="pf-label">12. Manner of Separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep')" disabled>❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-sep'); checkUnlock(this, 'btn-sep')">
       <div id="fu-sep" class="pf-followup">
         <div class="pf-followup-label">↳ How do you differentiate rodent damage from carnivore damage?</div>
         <input type="text" class="sel-ok">
@@ -253,6 +264,27 @@ td input[type="text"]:focus { background: #1e293b; }
 </div>
 
 <script>
+// --- VIVA UNLOCK LOGIC ---
+function checkUnlock(inputElement, btnIds) {
+  const hasText = inputElement.value.trim().length > 0;
+  const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
+  
+  idsToUnlock.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.disabled = !hasText;
+  });
+
+  // Hide or show the hints based on input
+  if (idsToUnlock.includes('btn-chin')) {
+    const hint = document.getElementById('hint-sex');
+    if (hint) hint.style.display = hasText ? 'none' : 'inline';
+  }
+  if (idsToUnlock.includes('btn-age')) {
+    const hint = document.getElementById('hint-age');
+    if (hint) hint.style.display = hasText ? 'none' : 'inline';
+  }
+}
+
 // --- 3D PIN LOGIC ---
 const modelViewer = document.getElementById('mandible-model');
 const anatomyBody = document.getElementById('anatomy-table-body');
