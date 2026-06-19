@@ -13,96 +13,115 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #
 .sel-ok { user-select: text; }
 .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
 
-/* Header & Cards */
+/* Header */
 .hdr { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
 .hdr h1 { font-size: 18px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
 .hdr p { font-size: 12px; color: #64748b; }
-.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-.card-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
-.step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 
-/* 3D Viewer & Pins */
+/* Cards & Badges */
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+.step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+
+/* Candidate Details */
+.field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+@media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+
+/* 3D Viewer */
 .viewer-container { width: 100%; height: 450px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
 model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
+
+/* SMALL PINS */
 .pin { background: #ef4444; border-radius: 50%; border: 2px solid #fff; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 0 2px rgba(239,68,68,0.4); }
 .pin:hover { background: #dc2626; transform: scale(1.2); transition: 0.1s; }
 
-/* Proforma Flow Elements */
-.pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
-.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-.pf-followup { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #334155; animation: slideDown 0.3s ease-out; }
-.pf-followup-label { font-size: 12px; font-weight: 600; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Inputs & Tables */
-input[type="text"], input[type="date"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 10px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
-input[type="text"]:focus, textarea:focus { border-color: #3b82f6; background: #0f172a; }
-textarea { min-height: 70px; resize: vertical; }
-
-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
 th { background: #334155; padding: 8px; text-align: left; font-weight: 600; font-size: 11px; border: 1px solid #1e293b; color: #f1f5f9; text-transform: uppercase; }
 td { border: 1px solid #334155; padding: 4px 6px; vertical-align: top; }
+.td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
+.td-label { font-weight: 600; color: #cbd5e1; vertical-align: middle; padding-left: 10px; position: relative; }
+
+/* Inputs */
+input[type="text"], input[type="date"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 8px 10px; width: 100%; outline: none; transition: border-color 0.15s; }
 td input[type="text"] { background: transparent; border: none; border-radius: 0; padding: 6px; }
 td input[type="text"]:focus { background: #1e293b; }
-.td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
+input[type="text"]:focus, textarea:focus { border-color: #3b82f6; }
+textarea { min-height: 70px; resize: vertical; }
+
+/* Conclusion Boxes */
+.conclusion-box { background: #0f172a; border: 1px dashed #3b82f6; border-radius: 6px; padding: 12px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+.conclusion-box label { font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase; }
 
 /* Buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: #334155; }
-.btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 8px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
-.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; float: right; margin-top: 10px; }
-.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 4px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
-.viva-btn:hover { background: #6d28d9; }
-.del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; padding: 6px 0; }
+.btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 16px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
+.btn-sm:hover { border-color: #3b82f6; color: #3b82f6; }
+.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
+.btn-primary:hover { background: #1d4ed8; }
 
-/* Modal */
+.del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
+.del-btn:hover { background: rgba(239,68,68,0.1); border-radius: 4px; }
+
+/* Viva Button Group & Logic */
+.viva-group { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
+.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 5px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; float: right; margin-right: 4px; }
+.viva-btn:not(:disabled):hover { background: #6d28d9; transform: translateY(-1px); }
+.viva-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; opacity: 0.6; }
+.viva-hint { font-size: 10px; color: #f59e0b; font-style: italic; }
+
+/* Viva Flashcard Modal */
 #viva-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
-.viva-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px; position: relative; }
+.viva-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px; position: relative; text-align: center; }
 .close-modal { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #64748b; font-size: 18px; cursor: pointer; }
-.viva-q { font-size: 14px; font-weight: 600; color: #f1f5f9; margin-bottom: 16px; line-height: 1.5; }
-.viva-opts { display: flex; flex-direction: column; gap: 8px; }
-.opt-btn { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 10px 14px; text-align: left; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-.opt-btn:hover { border-color: #3b82f6; }
-.viva-feedback { display: none; margin-top: 16px; padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.5; }
-.feedback-success { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; }
-.feedback-hint { background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5; }
+.viva-q { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 24px; line-height: 1.5; }
+.btn-reveal { background: #10b981; color: #fff; font-weight: 700; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.2s; }
+.btn-reveal:hover { background: #059669; }
+.viva-answer-box { display: none; margin-top: 20px; padding: 16px; background: #0f172a; border: 1px solid #3b82f6; border-radius: 8px; text-align: left; }
+.viva-a-title { font-size: 11px; color: #60a5fa; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+.viva-a-text { font-size: 14px; color: #e2e8f0; line-height: 1.6; }
 
-/* Print */
+/* Print Styles */
 @media print {
   body { background: #fff; color: #000; padding: 0; }
   .page { max-width: 100%; padding: 0; margin: 0; }
   .hdr { border-color: #ccc; background: #f8f9fa; }
   .hdr h1 { color: #000; }
-  .card, .pf-item { border: 1px solid #ccc; background: #fff; break-inside: avoid; }
-  input[type="text"], textarea { border: none !important; border-bottom: 1px solid #999 !important; background: transparent !important; color: #000 !important; padding: 4px 0 !important; }
-  .viewer-container, .btn, .btn-sm, .viva-btn, #instruction-box, .del-col { display: none !important; }
-  .pf-followup { display: block !important; border-top-color: #ccc; } 
+  .card { border: 1px solid #ccc; background: #fff; break-inside: avoid; margin-bottom: 20px; }
+  input[type="text"], input[type="date"], textarea { border: none !important; border-bottom: 1px dashed #999 !important; background: transparent !important; color: #000 !important; border-radius: 0 !important; padding: 4px 0 !important; }
+  .viewer-container, .btn-sm, .viva-group, .btn-primary, #instruction-box, .del-col, .viva-btn, .viva-hint { display: none !important; }
+  .conclusion-box { border: 1px solid #ccc; }
   th { background: #eee !important; color: #000 !important; border-color: #999 !important; }
   td { border-color: #999 !important; color: #000 !important; }
-  .td-center { color: #333 !important; }
+  .td-center, .td-label { color: #333 !important; }
 }
 </style>
 </head>
 <body>
 
 <div class="page">
+  
   <div class="hdr">
     <div style="font-size:28px">💀</div>
     <div>
       <h1>Forensic Medicine — OSPE Practical Proforma</h1>
-      <p>Skeletal Remains: 3D Mandible Analysis, Sex &amp; Age Estimation</p>
+      <p>Skeletal Remains: 3D Anatomy, Sex Determination &amp; Age Estimation</p>
     </div>
   </div>
 
+  <!-- CANDIDATE DETAILS -->
   <div class="card">
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-      <div><label style="font-size:10px; color:#64748b; font-weight:600;">STUDENT NAME</label><input type="text" value=""></div>
-      <div><label style="font-size:10px; color:#64748b; font-weight:600;">ROLL NUMBER</label><input type="text" value=""></div>
-      <div><label style="font-size:10px; color:#64748b; font-weight:600;">DATE</label><input type="date"></div>
+    <div class="field-grid">
+      <div class="field"><label>Student Name</label><input type="text"></div>
+      <div class="field"><label>Roll Number</label><input type="text"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
     </div>
   </div>
 
-  <!-- STEP 1: 3D ANATOMY -->
+  <!-- STEP 1: ANATOMY IDENTIFICATION -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 1</span> 3D Anatomical Identification</div>
     <div id="instruction-box" style="background:#1e3a8a; border:1px solid #3b82f6; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#bfdbfe;">
@@ -122,132 +141,165 @@ td input[type="text"]:focus { background: #1e293b; }
     </table>
   </div>
 
-  <!-- STEP 2: GUIDED PROFORMA FLOW -->
+  <!-- STEP 2: GENERAL PROFORMA -->
   <div class="card">
-    <div class="card-title"><span class="step-badge">Step 2</span> Progressive 12-Point Assessment</div>
-
-    <!-- 1. Bone -->
-    <div class="pf-item">
-      <div class="pf-label">1. Is it a bone or not? <button class="viva-btn" onclick="openViva('bone')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-bone')">
-      <div id="fu-bone" class="pf-followup">
-        <div class="pf-followup-label">↳ How do you prove this?</div>
-        <input type="text" class="sel-ok" value="">
-      </div>
-    </div>
-
-    <!-- 2. Name -->
-    <div class="pf-item">
-      <div class="pf-label">2. Name of Bone(s)</div>
-      <input type="text" class="sel-ok" value="">
-    </div>
-
-    <!-- 3. Human -->
-    <div class="pf-item">
-      <div class="pf-label">3. Whether human or not? <button class="viva-btn" onclick="openViva('human')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-human')">
-      <div id="fu-human" class="pf-followup">
-        <div class="pf-followup-label">↳ How do you prove it is human?</div>
-        <input type="text" class="sel-ok" value="">
-      </div>
-    </div>
-
-    <!-- 4. Number -->
-    <div class="pf-item">
-      <div class="pf-label">4. Whether belonging to one individual or more?</div>
-      <input type="text" class="sel-ok" value="">
-    </div>
-
-    <!-- 5. SEX DETERMINATION (Embedded Table) -->
-    <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">5. Sex Determination 
-        <div style="display:flex; gap:6px;">
-          <button class="viva-btn" onclick="openViva('chin')">❓ Chin Viva</button>
-          <button class="viva-btn" onclick="openViva('gonial')">❓ Gonial Angle Viva</button>
-        </div>
-      </div>
-      <table id="sex-table">
-        <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
-        <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th class="del-col"></th></tr></thead>
-        <tbody id="sex-table-body"></tbody>
-      </table>
-      <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
-      <div style="margin-top:12px;">
-        <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
-        <input type="text" class="sel-ok" value="">
-      </div>
-    </div>
-
-    <!-- 6. AGE ESTIMATION (Embedded Table) -->
-    <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation <button class="viva-btn" onclick="openViva('age')">❓ Foramen Viva</button></div>
-      <table id="age-table">
-        <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
-        <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
-        <tbody id="age-table-body"></tbody>
-      </table>
-      <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
-      <div style="margin-top:12px;">
-        <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
-        <input type="text" class="sel-ok" value="">
-      </div>
-    </div>
-
-    <!-- 7, 8, 9, 10 -->
-    <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok" value=""></div>
-    <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok" value=""></div>
-    <div class="pf-item"><div class="pf-label">9. Specific Identification</div><input type="text" class="sel-ok" value=""></div>
-    <div class="pf-item"><div class="pf-label">10. Probable Cause of Death</div><input type="text" class="sel-ok" value=""></div>
-
-    <!-- 11. Time Since Death -->
-    <div class="pf-item">
-      <div class="pf-label">11. Probable Time Since Death <button class="viva-btn" onclick="openViva('time')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-time')">
-      <div id="fu-time" class="pf-followup">
-        <div class="pf-followup-label">↳ Explain why this indicates a time of above 6 months?</div>
-        <input type="text" class="sel-ok" value="">
-      </div>
-    </div>
-
-    <!-- 12. Separation -->
-    <div class="pf-item">
-      <div class="pf-label">12. Manner of Separation <button class="viva-btn" onclick="openViva('sep')">❓ Viva</button></div>
-      <input type="text" class="sel-ok" value="" oninput="showFollowUp('fu-sep')">
-      <div id="fu-sep" class="pf-followup">
-        <div class="pf-followup-label">↳ How do you differentiate rodent damage from carnivore damage?</div>
-        <input type="text" class="sel-ok" value="">
-      </div>
-    </div>
-
+    <div class="card-title"><span class="step-badge">Step 2</span> 12-Point General Assessment</div>
+    
+    <table>
+      <colgroup><col style="width:50px"><col style="width:35%"><col style="width:65%"></colgroup>
+      <thead><tr><th class="td-center">S.No</th><th>Parameter</th><th>Finding / Answer</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-center">1</td>
+          <td class="td-label">Bone or not <button id="btn-bone" class="viva-btn" onclick="openViva('bone')" disabled>❓ Viva</button></td>
+          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-bone')"></td>
+        </tr>
+        <tr><td class="td-center">2</td><td class="td-label">Name of Bone / Bones</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr>
+          <td class="td-center">3</td>
+          <td class="td-label">Whether human or not <button id="btn-human" class="viva-btn" onclick="openViva('human')" disabled>❓ Viva</button></td>
+          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-human')"></td>
+        </tr>
+        <tr><td class="td-center">4</td><td class="td-label">Whether belong to one individual or more</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">5</td><td class="td-label">Age</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">6</td><td class="td-label">Sex</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">7</td><td class="td-label">Stature</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">8</td><td class="td-label">Race</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr><td class="td-center">9</td><td class="td-label">Identification</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr>
+          <td class="td-center">10</td>
+          <td class="td-label">Probable cause of death <button id="btn-cod" class="viva-btn" onclick="openViva('cod')" disabled>❓ Viva</button></td>
+          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')"></td>
+        </tr>
+        <tr><td class="td-center">11</td><td class="td-label">Probable time since death</td><td><input type="text" class="sel-ok"></td></tr>
+        <tr>
+          <td class="td-center">12</td>
+          <td class="td-label">Manner of separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep')" disabled>❓ Viva</button></td>
+          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-sep')"></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- STEP 3: OPINION -->
+  <!-- STEP 3: SEX DETERMINATION -->
   <div class="card">
-    <div class="card-title"><span class="step-badge">Step 3</span> Final Opinion</div>
+    <div class="card-title"><span class="step-badge">Step 3</span> Sex Determination</div>
+    
+    <table id="sex-table">
+      <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
+      <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th class="del-col"></th></tr></thead>
+      <tbody id="sex-table-body">
+        <!-- Blank rows added via JS -->
+      </tbody>
+    </table>
+    <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
+
+    <div class="conclusion-box">
+      <label>Conclusion (Sex):</label>
+      <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial'])">
+    </div>
+
+    <div class="viva-group" style="margin-top:12px;">
+      <span class="viva-hint" id="hint-sex">Type your conclusion above to unlock Viva Questions ➜</span>
+      <button id="btn-chin" class="viva-btn" style="float:none;" onclick="openViva('chin')" disabled>❓ Chin Viva</button>
+      <button id="btn-gonial" class="viva-btn" style="float:none;" onclick="openViva('gonial')" disabled>❓ Gonial Angle Viva</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: AGE ESTIMATION -->
+  <div class="card">
+    <div class="card-title"><span class="step-badge">Step 4</span> Age Estimation</div>
+    
+    <table id="age-table">
+      <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
+      <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
+      <tbody id="age-table-body">
+        <!-- Blank rows added via JS -->
+      </tbody>
+    </table>
+    <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
+
+    <div class="conclusion-box">
+      <label>Conclusion (Age):</label>
+      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-age')">
+    </div>
+
+    <div class="viva-group" style="margin-top:12px;">
+      <span class="viva-hint" id="hint-age">Type your conclusion above to unlock Viva Questions ➜</span>
+      <button id="btn-age" class="viva-btn" style="float:none;" onclick="openViva('age')" disabled>❓ Foramen Viva</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: OPINION -->
+  <div class="card">
+    <div class="card-title"><span class="step-badge">Step 5</span> Opinion</div>
     <textarea class="sel-ok"></textarea>
     
-    <div style="display:flex; gap:16px; margin-top:20px;">
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">STUDENT SIGNATURE</label><input type="text" value=""></div>
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">FACULTY SIGNATURE</label><input type="text" value=""></div>
+    <div style="display:flex; gap:16px; margin-top:16px;">
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase;">Student Signature</label><input type="text" class="sel-ok"></div>
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase;">Faculty Signature</label><input type="text" class="sel-ok"></div>
     </div>
   </div>
 
-  <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
+  <div style="text-align: right;">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
 
 </div>
 
+<!-- VIVA FLASHCARD MODAL -->
+<div id="viva-modal">
+  <div class="viva-box">
+    <button class="close-modal" onclick="closeViva()">✕</button>
+    <div id="viva-question" class="viva-q">Question text goes here?</div>
+    <button id="btn-reveal" class="btn-reveal" onclick="revealAnswer()">Reveal Answer</button>
+    
+    <div id="viva-answer-box" class="viva-answer-box">
+      <div class="viva-a-title">Correct Answer:</div>
+      <div id="viva-answer-text" class="viva-a-text"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-// --- 3D PIN LOGIC ---
+// --- VIVA UNLOCK LOGIC ---
+// Enables Viva buttons only when the associated input field is not empty.
+function checkUnlock(inputElement, btnIds) {
+  const hasText = inputElement.value.trim().length > 0;
+  
+  // Handle both single string ID or array of IDs
+  const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
+  
+  idsToUnlock.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.disabled = !hasText;
+    }
+  });
+
+  // Hide hints for Sex/Age if unlocked
+  if (btnIds.includes('btn-chin')) {
+    document.getElementById('hint-sex').style.display = hasText ? 'none' : 'inline';
+  }
+  if (btnIds === 'btn-age') {
+    document.getElementById('hint-age').style.display = hasText ? 'none' : 'inline';
+  }
+}
+
+// --- 3D PIN PLACEMENT LOGIC ---
 const modelViewer = document.getElementById('mandible-model');
 const anatomyBody = document.getElementById('anatomy-table-body');
 let pinCount = 0;
 
 modelViewer.addEventListener('click', (event) => {
   if (event.target.classList.contains('pin')) return;
+
   const hit = modelViewer.positionAndNormalFromPoint(event.clientX, event.clientY);
+  
   if (hit != null) {
     pinCount++;
     const pinId = 'pin-' + pinCount;
+
     const emptyRow = document.getElementById('empty-anatomy-row');
     if (emptyRow) emptyRow.remove();
 
@@ -271,7 +323,10 @@ modelViewer.addEventListener('click', (event) => {
 
     const tr = document.createElement('tr');
     tr.id = 'row-' + pinId;
-    tr.innerHTML = `<td class="td-center anatomy-num">${pinCount}</td><td><input type="text" class="sel-ok" value=""></td>`;
+    tr.innerHTML = `
+      <td class="td-center anatomy-num">${pinCount}</td>
+      <td><input type="text" class="sel-ok"></td>
+    `;
     anatomyBody.appendChild(tr);
     renumberAnatomy();
   }
@@ -280,7 +335,7 @@ modelViewer.addEventListener('click', (event) => {
 function renumberAnatomy() {
   const rows = anatomyBody.querySelectorAll('tr[id^="row-pin-"]');
   if (rows.length === 0) {
-    anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic;">Click on the 3D model to place a pin.</td></tr>';
+    anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic; padding:12px;">Click on the 3D model to place a pin.</td></tr>';
     pinCount = 0; 
   } else {
     rows.forEach((row, index) => {
@@ -292,19 +347,17 @@ function renumberAnatomy() {
   }
 }
 
-// --- DYNAMIC FOLLOW-UPS ---
-function showFollowUp(id) {
-  const el = document.getElementById(id);
-  if(el) el.style.display = 'block';
-}
-
-// --- DYNAMIC TABLES ---
+// --- DYNAMIC TABLE ROW LOGIC ---
 function addRow(tbodyId, cols) {
   const tbody = document.getElementById(tbodyId);
   const tr = document.createElement('tr');
+  
   let html = `<td class="td-center row-num">${tbody.children.length + 1}</td>`;
-  for(let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok" value=""></td>`;
+  for(let i=1; i < cols-1; i++) {
+    html += `<td><input type="text" class="sel-ok"></td>`;
+  }
   html += `<td class="del-col"><button class="del-btn" onclick="deleteRow(this, '${tbodyId}')" title="Remove row">✕</button></td>`;
+  
   tr.innerHTML = html;
   tbody.appendChild(tr);
   renumberTable(tbodyId);
@@ -316,100 +369,76 @@ function deleteRow(btn, tbodyId) {
 }
 
 function renumberTable(tbodyId) {
-  Array.from(document.getElementById(tbodyId).children).forEach((row, index) => {
+  const tbody = document.getElementById(tbodyId);
+  Array.from(tbody.children).forEach((row, index) => {
     const numCell = row.querySelector('.row-num');
     if(numCell) numCell.innerText = index + 1;
   });
 }
 
+// Initialize tables with blank rows
 window.onload = () => {
-  addRow('sex-table-body', 4); addRow('sex-table-body', 4);
-  addRow('age-table-body', 3); addRow('age-table-body', 3);
+  addRow('sex-table-body', 4);
+  addRow('sex-table-body', 4);
+  addRow('age-table-body', 3);
+  addRow('age-table-body', 3);
 };
 
-// --- VIVA QUESTION BANK (Sourced from K.S. Narayan Reddy Theory) ---
+
+// --- VIVA QUESTION BANK (FLASHCARD STYLE) ---
 const vivaQuestions = {
   bone: {
-    q: "If a recovered specimen is very small, how can you definitively confirm it is bone and not a piece of wood or stone?",
-    options: [
-      { text: "By testing its specific gravity.", correct: false, feedback: "Incorrect. While bone has a specific gravity of 2, histological examination is the definitive test for small fragments." },
-      { text: "By subjecting it to histological examination.", correct: true, feedback: "Correct! Histological examination reveals the characteristic Haversian systems of human bone." }
-    ]
+    q: "How do you definitively confirm that a small, dirty fragment is actually a human bone and not a stone or piece of wood?",
+    a: "Anatomical shape and structure usually help. However, if it is a small fragment, histological examination under a microscope is the definitive test; true bone will reveal characteristic Haversian systems."
   },
   human: {
-    q: "Which microscopic feature is characteristic of non-human animal bones?",
-    options: [
-      { text: "Plexiform structures in cross-section.", correct: true, feedback: "Correct! Non-human bones contain plexiform structures, whereas human bones do not." },
-      { text: "Larger Haversian canals.", correct: false, feedback: "Incorrect. The presence of plexiform structures is the key microscopic differentiator between animal and human bones." }
-    ]
+    q: "If a bone is old and dry, how do you differentiate it from a non-human animal bone?",
+    a: "By microscopic examination. Non-human animal bones contain 'plexiform structures' in their cross-section, whereas human bones do not. They can also be distinguished by chemical analysis of bone-ash."
   },
-  gonial: {
-    q: "Describe the gonial angle (angle of body and ramus) in a male mandible.",
-    options: [
-      { text: "More obtuse (over 125°), not prominent, and inverted.", correct: false, feedback: "Incorrect. That describes the female mandible." },
-      { text: "Less obtuse (under 125°), prominent, and everted.", correct: true, feedback: "Correct! The strong muscle attachments in males cause the angle to be less obtuse and everted (flaring outward)." }
-    ]
-  },
-  chin: {
-    q: "You view the chin (symphysis) from the front and it appears distinctly V-shaped and rounded. What is the likely sex?",
-    options: [
-      { text: "Male.", correct: false, feedback: "Incorrect. Males typically exhibit a broad, square, U-shaped chin." },
-      { text: "Female.", correct: true, feedback: "Correct! Females typically have a rounded, narrower, V-shaped chin compared to the broad, square male chin." }
-    ]
-  },
-  age: {
-    q: "If the mental foramen is located very close to the UPPER alveolar margin, what does this indicate about the individual's age?",
-    options: [
-      { text: "It is an infant mandible.", correct: false, feedback: "Incorrect. In infancy, the mental foramen opens near the LOWER margin." },
-      { text: "It is from an old-aged individual.", correct: true, feedback: "Correct! In old age, teeth are lost and the alveolar bone resorbs, leaving the foramen situated near the upper margin." }
-    ]
-  },
-  time: {
-    q: "If a bone is completely devoid of soft tissue, cartilage, and ligaments, and has lost the odour of decomposition, what is the minimum estimated time since death?",
-    options: [
-      { text: "More than 6 months.", correct: true, feedback: "Correct! Pieces of cartilage and ligaments usually remain attached for 3 to 4 months or more. Complete absence indicates >6 months." },
-      { text: "Less than 2 weeks.", correct: false, feedback: "Incorrect. Odour and soft tissues/cartilage persist for months." }
-    ]
+  cod: {
+    q: "Can you easily determine the cause of death from a skeletonized body? What specific signs do you look for?",
+    a: "No, it cannot be made out easily unless there is evidence of fatal injury to a vital organ or blood vessel. You must look for marks of burning, deep weapon cuts, unhealed fractures, or traces of diatoms/heavy metals inside the bone marrow."
   },
   sep: {
-    q: "How do the bite marks of rodents differ from those of carnivores (like dogs) on bone?",
-    options: [
-      { text: "Rodents swallow bones whole, while carnivores only leave 'fork-shaped' fractures.", correct: false, feedback: "Incorrect. Deer/sheep leave fork-shaped fragments." },
-      { text: "Rodents cause parallel 'chisel marks', while carnivores cause punctures, pits, and furrows.", correct: true, feedback: "Correct! Rodents gnaw creating parallel grooves, whereas carnivores puncture thin bones and attack cancellous ends." }
-    ]
+    q: "How do you differentiate the marks left by rodents from those left by carnivores (like dogs) on skeletal remains?",
+    a: "Rodents leave parallel grooves called 'chisel marks' due to gnawing. Carnivores cause heavy damage by gnawing the softer cancellous ends first, leaving distinct punctures, pits, and furrows."
+  },
+  gonial: {
+    q: "Describe the typical angle of the mandible (gonion) in males versus females.",
+    a: "In males, the angle is less obtuse (under 125°), prominent, and everted (flaring outward) due to strong masseter muscle pull. In females, it is more obtuse, not prominent, and inverted or straight."
+  },
+  chin: {
+    q: "Describe the difference in the shape of the chin (symphysis) between male and female mandibles.",
+    a: "The male chin typically has a broad, square, U-shaped appearance. The female chin is typically narrower, rounded, and has a V-shaped appearance."
+  },
+  age: {
+    q: "How does the position of the mental foramen change from infancy to old age?",
+    a: "In infancy, it opens near the lower margin of the mandible. In adults, it is located midway between the upper and lower margins. In old age, as teeth are lost and alveolar bone resorbs, it is situated near the upper (alveolar) margin."
   }
 };
 
 const modal = document.getElementById('viva-modal');
 const qBox = document.getElementById('viva-question');
-const optsBox = document.getElementById('viva-options');
-const fbBox = document.getElementById('viva-feedback');
+const aBox = document.getElementById('viva-answer-box');
+const aText = document.getElementById('viva-answer-text');
+const revealBtn = document.getElementById('btn-reveal');
+let currentTrait = '';
 
 function openViva(traitId) {
-  const data = vivaQuestions[traitId];
-  qBox.innerText = data.q;
-  optsBox.innerHTML = '';
-  fbBox.style.display = 'none';
-  fbBox.className = 'viva-feedback';
-
-  data.options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn';
-    btn.innerText = opt.text;
-    btn.onclick = () => {
-      fbBox.style.display = 'block';
-      fbBox.innerText = opt.feedback;
-      if (opt.correct) {
-        fbBox.classList.add('feedback-success');
-        fbBox.classList.remove('feedback-hint');
-      } else {
-        fbBox.classList.add('feedback-hint');
-        fbBox.classList.remove('feedback-success');
-      }
-    };
-    optsBox.appendChild(btn);
-  });
+  currentTrait = traitId;
+  qBox.innerText = vivaQuestions[traitId].q;
+  
+  // Reset modal state
+  aBox.style.display = 'none';
+  revealBtn.style.display = 'inline-block';
+  
   modal.style.display = 'flex';
+}
+
+function revealAnswer() {
+  aText.innerText = vivaQuestions[currentTrait].a;
+  revealBtn.style.display = 'none';
+  aBox.style.display = 'block';
 }
 
 function closeViva() {
