@@ -13,15 +13,13 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #
 .sel-ok { user-select: text; }
 .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
 
-/* Header */
+/* Header & Cards */
 .hdr { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
 .hdr h1 { font-size: 18px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
 .hdr p { font-size: 12px; color: #64748b; }
-
-/* Cards & Badges */
-.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-.step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+.card-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
+.step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 
 /* Candidate Details */
 .field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
@@ -29,90 +27,75 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #
 .field { display: flex; flex-direction: column; gap: 4px; }
 .field label { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
 
-/* 3D Viewer */
+/* 3D Viewer & Pins */
 .viewer-container { width: 100%; height: 450px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
 model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; }
-
-/* SMALL PINS */
 .pin { background: #ef4444; border-radius: 50%; border: 2px solid #fff; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 0 2px rgba(239,68,68,0.4); }
 .pin:hover { background: #dc2626; transform: scale(1.2); transition: 0.1s; }
 
-/* Tables */
-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
-th { background: #334155; padding: 8px; text-align: left; font-weight: 600; font-size: 11px; border: 1px solid #1e293b; color: #f1f5f9; text-transform: uppercase; }
-td { border: 1px solid #334155; padding: 4px 6px; vertical-align: top; }
-.td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
-.td-label { font-weight: 600; color: #cbd5e1; vertical-align: middle; padding-left: 10px; position: relative; }
+/* Proforma Flow Elements */
+.pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
+.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.pf-followup { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #334155; animation: slideDown 0.3s ease-out; }
+.pf-followup-label { font-size: 12px; font-weight: 600; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Inputs */
-input[type="text"], input[type="date"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 8px 10px; width: 100%; outline: none; transition: border-color 0.15s; }
-td input[type="text"] { background: transparent; border: none; border-radius: 0; padding: 6px; }
-td input[type="text"]:focus { background: #1e293b; }
-input[type="text"]:focus, textarea:focus { border-color: #3b82f6; }
+/* Inputs & Tables */
+input[type="text"], input[type="date"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 10px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
+input[type="text"]:focus, textarea:focus { border-color: #3b82f6; background: #0f172a; }
 textarea { min-height: 70px; resize: vertical; }
 
-/* Conclusion Boxes */
-.conclusion-box { background: #0f172a; border: 1px dashed #3b82f6; border-radius: 6px; padding: 12px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
-.conclusion-box label { font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+th { background: #334155; padding: 8px; text-align: left; font-weight: 600; font-size: 11px; border: 1px solid #1e293b; color: #f1f5f9; text-transform: uppercase; }
+td { border: 1px solid #334155; padding: 4px 6px; vertical-align: top; }
+td input[type="text"] { background: transparent; border: none; border-radius: 0; padding: 6px; }
+td input[type="text"]:focus { background: #1e293b; }
+.td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
 
 /* Buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; transition: all 0.15s; }
 .btn:hover { background: #334155; }
-.btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 16px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
-.btn-sm:hover { border-color: #3b82f6; color: #3b82f6; }
-.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
-.btn-primary:hover { background: #1d4ed8; }
+.btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 8px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
+.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; float: right; margin-top: 10px; }
+.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 4px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+.viva-btn:hover { background: #6d28d9; }
+.del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; padding: 6px 0; }
 
-.del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
-.del-btn:hover { background: rgba(239,68,68,0.1); border-radius: 4px; }
-
-/* Viva Button Group & Logic */
-.viva-group { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; }
-.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 5px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; float: right; margin-right: 4px; }
-.viva-btn:not(:disabled):hover { background: #6d28d9; transform: translateY(-1px); }
-.viva-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; opacity: 0.6; }
-.viva-hint { font-size: 10px; color: #f59e0b; font-style: italic; }
-
-/* Viva Flashcard Modal */
+/* Flashcard Modal */
 #viva-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
 .viva-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px; position: relative; text-align: center; }
 .close-modal { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #64748b; font-size: 18px; cursor: pointer; }
-.viva-q { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 24px; line-height: 1.5; }
+.viva-q { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 24px; line-height: 1.5; text-align: left; }
 .btn-reveal { background: #10b981; color: #fff; font-weight: 700; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.2s; }
 .btn-reveal:hover { background: #059669; }
 .viva-answer-box { display: none; margin-top: 20px; padding: 16px; background: #0f172a; border: 1px solid #3b82f6; border-radius: 8px; text-align: left; }
 .viva-a-title { font-size: 11px; color: #60a5fa; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
 .viva-a-text { font-size: 14px; color: #e2e8f0; line-height: 1.6; }
 
-/* Print Styles */
+/* Print */
 @media print {
   body { background: #fff; color: #000; padding: 0; }
   .page { max-width: 100%; padding: 0; margin: 0; }
   .hdr { border-color: #ccc; background: #f8f9fa; }
   .hdr h1 { color: #000; }
-  .card { border: 1px solid #ccc; background: #fff; break-inside: avoid; margin-bottom: 20px; }
-  input[type="text"], input[type="date"], textarea { border: none !important; border-bottom: 1px dashed #999 !important; background: transparent !important; color: #000 !important; border-radius: 0 !important; padding: 4px 0 !important; }
-  .viewer-container, .btn-sm, .viva-group, .btn-primary, #instruction-box, .del-col, .viva-btn, .viva-hint { display: none !important; }
-  .conclusion-box { border: 1px solid #ccc; }
-  th { background: #eee !important; color: #000 !important; border-color: #999 !important; }
-  td { border-color: #999 !important; color: #000 !important; }
-  .td-center, .td-label { color: #333 !important; }
+  .card, .pf-item { border: 1px solid #ccc; background: #fff; break-inside: avoid; }
+  input[type="text"], textarea { border: none !important; border-bottom: 1px dashed #999 !important; background: transparent !important; color: #000 !important; }
+  .viewer-container, .btn, .btn-sm, .viva-btn, #instruction-box, .del-col { display: none !important; }
+  .pf-followup { display: block !important; border-top-color: #ccc; } 
 }
 </style>
 </head>
 <body>
 
 <div class="page">
-  
   <div class="hdr">
     <div style="font-size:28px">💀</div>
     <div>
       <h1>Forensic Medicine — OSPE Practical Proforma</h1>
-      <p>Skeletal Remains: 3D Anatomy, Sex Determination &amp; Age Estimation</p>
+      <p>Skeletal Remains: 3D Mandible Analysis, Sex &amp; Age Estimation</p>
     </div>
   </div>
 
-  <!-- CANDIDATE DETAILS -->
   <div class="card">
     <div class="field-grid">
       <div class="field"><label>Student Name</label><input type="text"></div>
@@ -121,7 +104,7 @@ textarea { min-height: 70px; resize: vertical; }
     </div>
   </div>
 
-  <!-- STEP 1: ANATOMY IDENTIFICATION -->
+  <!-- STEP 1: 3D ANATOMY -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 1</span> 3D Anatomical Identification</div>
     <div id="instruction-box" style="background:#1e3a8a; border:1px solid #3b82f6; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#bfdbfe;">
@@ -141,109 +124,117 @@ textarea { min-height: 70px; resize: vertical; }
     </table>
   </div>
 
-  <!-- STEP 2: GENERAL PROFORMA -->
+  <!-- STEP 2: GUIDED PROFORMA FLOW -->
   <div class="card">
-    <div class="card-title"><span class="step-badge">Step 2</span> 12-Point General Assessment</div>
-    
-    <table>
-      <colgroup><col style="width:50px"><col style="width:35%"><col style="width:65%"></colgroup>
-      <thead><tr><th class="td-center">S.No</th><th>Parameter</th><th>Finding / Answer</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="td-center">1</td>
-          <td class="td-label">Bone or not <button id="btn-bone" class="viva-btn" onclick="openViva('bone')" disabled>❓ Viva</button></td>
-          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-bone')"></td>
-        </tr>
-        <tr><td class="td-center">2</td><td class="td-label">Name of Bone / Bones</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr>
-          <td class="td-center">3</td>
-          <td class="td-label">Whether human or not <button id="btn-human" class="viva-btn" onclick="openViva('human')" disabled>❓ Viva</button></td>
-          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-human')"></td>
-        </tr>
-        <tr><td class="td-center">4</td><td class="td-label">Whether belong to one individual or more</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr><td class="td-center">5</td><td class="td-label">Age</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr><td class="td-center">6</td><td class="td-label">Sex</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr><td class="td-center">7</td><td class="td-label">Stature</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr><td class="td-center">8</td><td class="td-label">Race</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr><td class="td-center">9</td><td class="td-label">Identification</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr>
-          <td class="td-center">10</td>
-          <td class="td-label">Probable cause of death <button id="btn-cod" class="viva-btn" onclick="openViva('cod')" disabled>❓ Viva</button></td>
-          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')"></td>
-        </tr>
-        <tr><td class="td-center">11</td><td class="td-label">Probable time since death</td><td><input type="text" class="sel-ok"></td></tr>
-        <tr>
-          <td class="td-center">12</td>
-          <td class="td-label">Manner of separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep')" disabled>❓ Viva</button></td>
-          <td><input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-sep')"></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card-title"><span class="step-badge">Step 2</span> Progressive 12-Point Assessment</div>
+
+    <!-- 1. Bone -->
+    <div class="pf-item">
+      <div class="pf-label">1. Is it a bone or not? <button class="viva-btn" onclick="openViva('bone')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-bone')">
+      <div id="fu-bone" class="pf-followup">
+        <div class="pf-followup-label">↳ How do you prove this?</div>
+        <input type="text" class="sel-ok">
+      </div>
+    </div>
+
+    <!-- 2. Name -->
+    <div class="pf-item">
+      <div class="pf-label">2. Name of Bone(s)</div>
+      <input type="text" class="sel-ok">
+    </div>
+
+    <!-- 3. Human -->
+    <div class="pf-item">
+      <div class="pf-label">3. Whether human or not? <button class="viva-btn" onclick="openViva('human')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-human')">
+      <div id="fu-human" class="pf-followup">
+        <div class="pf-followup-label">↳ How do you prove it is human?</div>
+        <input type="text" class="sel-ok">
+      </div>
+    </div>
+
+    <!-- 4. Number -->
+    <div class="pf-item">
+      <div class="pf-label">4. Whether belonging to one individual or more?</div>
+      <input type="text" class="sel-ok">
+    </div>
+
+    <!-- 5. SEX DETERMINATION (Embedded Table) -->
+    <div class="pf-item" style="border-color: #3b82f6;">
+      <div class="pf-label" style="color:#60a5fa;">5. Sex Determination 
+        <div style="display:flex; gap:6px;">
+          <button class="viva-btn" onclick="openViva('chin')">❓ Chin Viva</button>
+          <button class="viva-btn" onclick="openViva('gonial')">❓ Gonial Angle Viva</button>
+        </div>
+      </div>
+      <table id="sex-table">
+        <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
+        <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th class="del-col"></th></tr></thead>
+        <tbody id="sex-table-body"></tbody>
+      </table>
+      <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
+      <div style="margin-top:12px;">
+        <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
+        <input type="text" class="sel-ok">
+      </div>
+    </div>
+
+    <!-- 6. AGE ESTIMATION (Embedded Table) -->
+    <div class="pf-item" style="border-color: #3b82f6;">
+      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation <button class="viva-btn" onclick="openViva('age')">❓ Foramen Viva</button></div>
+      <table id="age-table">
+        <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
+        <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
+        <tbody id="age-table-body"></tbody>
+      </table>
+      <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
+      <div style="margin-top:12px;">
+        <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
+        <input type="text" class="sel-ok">
+      </div>
+    </div>
+
+    <!-- 7, 8, 9, 10 -->
+    <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok"></div>
+    <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok"></div>
+    <div class="pf-item"><div class="pf-label">9. Specific Identification</div><input type="text" class="sel-ok"></div>
+    <div class="pf-item"><div class="pf-label">10. Probable Cause of Death <button class="viva-btn" onclick="openViva('cod')">❓ Viva</button></div><input type="text" class="sel-ok"></div>
+
+    <!-- 11. Time Since Death -->
+    <div class="pf-item">
+      <div class="pf-label">11. Probable Time Since Death</div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-time')">
+      <div id="fu-time" class="pf-followup">
+        <div class="pf-followup-label">↳ Explain why this indicates a time of above 6 months?</div>
+        <input type="text" class="sel-ok">
+      </div>
+    </div>
+
+    <!-- 12. Separation -->
+    <div class="pf-item">
+      <div class="pf-label">12. Manner of Separation <button class="viva-btn" onclick="openViva('sep')">❓ Viva</button></div>
+      <input type="text" class="sel-ok" oninput="showFollowUp('fu-sep')">
+      <div id="fu-sep" class="pf-followup">
+        <div class="pf-followup-label">↳ How do you differentiate rodent damage from carnivore damage?</div>
+        <input type="text" class="sel-ok">
+      </div>
+    </div>
+
   </div>
 
-  <!-- STEP 3: SEX DETERMINATION -->
+  <!-- STEP 3: OPINION -->
   <div class="card">
-    <div class="card-title"><span class="step-badge">Step 3</span> Sex Determination</div>
-    
-    <table id="sex-table">
-      <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
-      <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th class="del-col"></th></tr></thead>
-      <tbody id="sex-table-body">
-        <!-- Blank rows added via JS -->
-      </tbody>
-    </table>
-    <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
-
-    <div class="conclusion-box">
-      <label>Conclusion (Sex):</label>
-      <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial'])">
-    </div>
-
-    <div class="viva-group" style="margin-top:12px;">
-      <span class="viva-hint" id="hint-sex">Type your conclusion above to unlock Viva Questions ➜</span>
-      <button id="btn-chin" class="viva-btn" style="float:none;" onclick="openViva('chin')" disabled>❓ Chin Viva</button>
-      <button id="btn-gonial" class="viva-btn" style="float:none;" onclick="openViva('gonial')" disabled>❓ Gonial Angle Viva</button>
-    </div>
-  </div>
-
-  <!-- STEP 4: AGE ESTIMATION -->
-  <div class="card">
-    <div class="card-title"><span class="step-badge">Step 4</span> Age Estimation</div>
-    
-    <table id="age-table">
-      <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
-      <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
-      <tbody id="age-table-body">
-        <!-- Blank rows added via JS -->
-      </tbody>
-    </table>
-    <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
-
-    <div class="conclusion-box">
-      <label>Conclusion (Age):</label>
-      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-age')">
-    </div>
-
-    <div class="viva-group" style="margin-top:12px;">
-      <span class="viva-hint" id="hint-age">Type your conclusion above to unlock Viva Questions ➜</span>
-      <button id="btn-age" class="viva-btn" style="float:none;" onclick="openViva('age')" disabled>❓ Foramen Viva</button>
-    </div>
-  </div>
-
-  <!-- STEP 5: OPINION -->
-  <div class="card">
-    <div class="card-title"><span class="step-badge">Step 5</span> Opinion</div>
+    <div class="card-title"><span class="step-badge">Step 3</span> Final Opinion</div>
     <textarea class="sel-ok"></textarea>
     
-    <div style="display:flex; gap:16px; margin-top:16px;">
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase;">Student Signature</label><input type="text" class="sel-ok"></div>
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase;">Faculty Signature</label><input type="text" class="sel-ok"></div>
+    <div style="display:flex; gap:16px; margin-top:20px;">
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">STUDENT SIGNATURE</label><input type="text"></div>
+      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">FACULTY SIGNATURE</label><input type="text"></div>
     </div>
   </div>
 
-  <div style="text-align: right;">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save PDF</button>
-  </div>
+  <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
 
 </div>
 
@@ -262,44 +253,17 @@ textarea { min-height: 70px; resize: vertical; }
 </div>
 
 <script>
-// --- VIVA UNLOCK LOGIC ---
-// Enables Viva buttons only when the associated input field is not empty.
-function checkUnlock(inputElement, btnIds) {
-  const hasText = inputElement.value.trim().length > 0;
-  
-  // Handle both single string ID or array of IDs
-  const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
-  
-  idsToUnlock.forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.disabled = !hasText;
-    }
-  });
-
-  // Hide hints for Sex/Age if unlocked
-  if (btnIds.includes('btn-chin')) {
-    document.getElementById('hint-sex').style.display = hasText ? 'none' : 'inline';
-  }
-  if (btnIds === 'btn-age') {
-    document.getElementById('hint-age').style.display = hasText ? 'none' : 'inline';
-  }
-}
-
-// --- 3D PIN PLACEMENT LOGIC ---
+// --- 3D PIN LOGIC ---
 const modelViewer = document.getElementById('mandible-model');
 const anatomyBody = document.getElementById('anatomy-table-body');
 let pinCount = 0;
 
 modelViewer.addEventListener('click', (event) => {
   if (event.target.classList.contains('pin')) return;
-
   const hit = modelViewer.positionAndNormalFromPoint(event.clientX, event.clientY);
-  
   if (hit != null) {
     pinCount++;
     const pinId = 'pin-' + pinCount;
-
     const emptyRow = document.getElementById('empty-anatomy-row');
     if (emptyRow) emptyRow.remove();
 
@@ -323,10 +287,7 @@ modelViewer.addEventListener('click', (event) => {
 
     const tr = document.createElement('tr');
     tr.id = 'row-' + pinId;
-    tr.innerHTML = `
-      <td class="td-center anatomy-num">${pinCount}</td>
-      <td><input type="text" class="sel-ok"></td>
-    `;
+    tr.innerHTML = `<td class="td-center anatomy-num">${pinCount}</td><td><input type="text" class="sel-ok"></td>`;
     anatomyBody.appendChild(tr);
     renumberAnatomy();
   }
@@ -335,7 +296,7 @@ modelViewer.addEventListener('click', (event) => {
 function renumberAnatomy() {
   const rows = anatomyBody.querySelectorAll('tr[id^="row-pin-"]');
   if (rows.length === 0) {
-    anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic; padding:12px;">Click on the 3D model to place a pin.</td></tr>';
+    anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic;">Click on the 3D model to place a pin.</td></tr>';
     pinCount = 0; 
   } else {
     rows.forEach((row, index) => {
@@ -347,17 +308,21 @@ function renumberAnatomy() {
   }
 }
 
-// --- DYNAMIC TABLE ROW LOGIC ---
+// --- DYNAMIC FOLLOW-UPS ---
+function showFollowUp(id) {
+  const el = document.getElementById(id);
+  if(el && el.style.display !== 'block') {
+    el.style.display = 'block';
+  }
+}
+
+// --- DYNAMIC TABLES ---
 function addRow(tbodyId, cols) {
   const tbody = document.getElementById(tbodyId);
   const tr = document.createElement('tr');
-  
   let html = `<td class="td-center row-num">${tbody.children.length + 1}</td>`;
-  for(let i=1; i < cols-1; i++) {
-    html += `<td><input type="text" class="sel-ok"></td>`;
-  }
+  for(let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok"></td>`;
   html += `<td class="del-col"><button class="del-btn" onclick="deleteRow(this, '${tbodyId}')" title="Remove row">✕</button></td>`;
-  
   tr.innerHTML = html;
   tbody.appendChild(tr);
   renumberTable(tbodyId);
@@ -369,21 +334,16 @@ function deleteRow(btn, tbodyId) {
 }
 
 function renumberTable(tbodyId) {
-  const tbody = document.getElementById(tbodyId);
-  Array.from(tbody.children).forEach((row, index) => {
+  Array.from(document.getElementById(tbodyId).children).forEach((row, index) => {
     const numCell = row.querySelector('.row-num');
     if(numCell) numCell.innerText = index + 1;
   });
 }
 
-// Initialize tables with blank rows
 window.onload = () => {
-  addRow('sex-table-body', 4);
-  addRow('sex-table-body', 4);
-  addRow('age-table-body', 3);
-  addRow('age-table-body', 3);
+  addRow('sex-table-body', 4); addRow('sex-table-body', 4);
+  addRow('age-table-body', 3); addRow('age-table-body', 3);
 };
-
 
 // --- VIVA QUESTION BANK (FLASHCARD STYLE) ---
 const vivaQuestions = {
