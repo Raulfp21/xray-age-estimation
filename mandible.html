@@ -100,6 +100,9 @@ td input[type="text"]:focus { background: #1e293b; }
 .viva-hint { font-size: 10px; color: #f59e0b; font-style: italic; margin-right: 4px; }
 .del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; padding: 6px 0; }
 
+/* Locked Input styling */
+input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; color: #94a3b8; cursor: not-allowed; }
+
 /* Flashcard Modal */
 #viva-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
 .viva-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px; position: relative; text-align: center; }
@@ -257,8 +260,8 @@ td input[type="text"]:focus { background: #1e293b; }
     <div class="card-title"><span class="step-badge">Step 2</span> Progressive 12-Point Assessment</div>
 
     <div class="pf-item">
-      <div class="pf-label">1. Is it a bone or not? <button id="btn-bone" class="viva-btn" onclick="openViva('bone')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-bone'); checkUnlock(this, 'btn-bone')">
+      <div class="pf-label">1. Is it a bone or not? <button id="btn-bone" class="viva-btn" onclick="openViva('bone', 'in-bone')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-bone" class="sel-ok" oninput="showFollowUp('fu-bone'); checkUnlock(this, 'btn-bone')">
       <div id="fu-bone" class="pf-followup">
         <div class="pf-followup-label">↳ How do you prove this?</div>
         <input type="text" class="sel-ok">
@@ -266,13 +269,13 @@ td input[type="text"]:focus { background: #1e293b; }
     </div>
 
     <div class="pf-item">
-      <div class="pf-label">2. Name of Bone(s) <button id="btn-name" class="viva-btn" onclick="openViva('name')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-name')">
+      <div class="pf-label">2. Name of Bone(s) <button id="btn-name" class="viva-btn" onclick="openViva('name', 'in-name')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-name" class="sel-ok" oninput="checkUnlock(this, 'btn-name')">
     </div>
 
     <div class="pf-item">
-      <div class="pf-label">3. Whether human or not? <button id="btn-human" class="viva-btn" onclick="openViva('human')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-human'); checkUnlock(this, 'btn-human')">
+      <div class="pf-label">3. Whether human or not? <button id="btn-human" class="viva-btn" onclick="openViva('human', 'in-human')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-human" class="sel-ok" oninput="showFollowUp('fu-human'); checkUnlock(this, 'btn-human')">
       <div id="fu-human" class="pf-followup">
         <div class="pf-followup-label">↳ How do you prove it is human?</div>
         <input type="text" class="sel-ok">
@@ -280,8 +283,8 @@ td input[type="text"]:focus { background: #1e293b; }
     </div>
 
     <div class="pf-item">
-      <div class="pf-label">4. Whether belonging to one individual or more? <button id="btn-number" class="viva-btn" onclick="openViva('number')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-number')">
+      <div class="pf-label">4. Whether belonging to one individual or more? <button id="btn-number" class="viva-btn" onclick="openViva('number', 'in-number')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-number" class="sel-ok" oninput="checkUnlock(this, 'btn-number')">
     </div>
 
     <!-- 5. SEX DETERMINATION -->
@@ -289,10 +292,10 @@ td input[type="text"]:focus { background: #1e293b; }
       <div class="pf-label" style="color:#60a5fa;">5. Sex Determination
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
           <span class="viva-hint" id="hint-sex">Type conclusion to unlock ➜</span>
-          <button id="btn-chin" class="viva-btn" onclick="openViva('chin')" disabled>❓ Chin Viva</button>
-          <button id="btn-gonial" class="viva-btn" onclick="openViva('gonial')" disabled>❓ Gonial Angle Viva</button>
-          <button id="btn-ramus" class="viva-btn" onclick="openViva('ramus')" disabled>❓ Ramus Viva</button>
-          <button id="btn-tubercle" class="viva-btn" onclick="openViva('tubercle')" disabled>❓ Mental Tubercle Viva</button>
+          <button id="btn-chin" class="viva-btn" onclick="openViva('chin', 'in-sex-concl')" disabled>❓ Viva</button>
+          <button id="btn-gonial" class="viva-btn" onclick="openViva('gonial', 'in-sex-concl')" disabled>❓ Viva</button>
+          <button id="btn-ramus" class="viva-btn" onclick="openViva('ramus', 'in-sex-concl')" disabled>❓ Viva</button>
+          <button id="btn-tubercle" class="viva-btn" onclick="openViva('tubercle', 'in-sex-concl')" disabled>❓ Viva</button>
         </div>
       </div>
       <table id="sex-table">
@@ -303,7 +306,7 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
-        <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial', 'btn-ramus', 'btn-tubercle'])">
+        <input type="text" id="in-sex-concl" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial', 'btn-ramus', 'btn-tubercle'])">
       </div>
     </div>
 
@@ -312,8 +315,8 @@ td input[type="text"]:focus { background: #1e293b; }
       <div class="pf-label" style="color:#60a5fa;">6. Age Estimation
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
           <span class="viva-hint" id="hint-age">Type conclusion to unlock ➜</span>
-          <button id="btn-age" class="viva-btn" onclick="openViva('age')" disabled>❓ Foramen Viva</button>
-          <button id="btn-thirdmolar" class="viva-btn" onclick="openViva('thirdmolar')" disabled>❓ Third Molar Viva</button>
+          <button id="btn-age" class="viva-btn" onclick="openViva('age', 'in-age-concl')" disabled>❓ Viva</button>
+          <button id="btn-thirdmolar" class="viva-btn" onclick="openViva('thirdmolar', 'in-age-concl')" disabled>❓ Viva</button>
         </div>
       </div>
       <table id="age-table">
@@ -324,24 +327,24 @@ td input[type="text"]:focus { background: #1e293b; }
       <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
       <div style="margin-top:12px;">
         <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
-        <input type="text" class="sel-ok" oninput="checkUnlock(this, ['btn-age','btn-thirdmolar'])">
+        <input type="text" id="in-age-concl" class="sel-ok" oninput="checkUnlock(this, ['btn-age','btn-thirdmolar'])">
       </div>
     </div>
 
     <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok"></div>
     <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok"></div>
     <div class="pf-item">
-      <div class="pf-label">9. Specific Identification <button id="btn-ident" class="viva-btn" onclick="openViva('ident')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-ident')">
+      <div class="pf-label">9. Specific Identification <button id="btn-ident" class="viva-btn" onclick="openViva('ident', 'in-ident')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-ident" class="sel-ok" oninput="checkUnlock(this, 'btn-ident')">
     </div>
     <div class="pf-item">
-      <div class="pf-label">10. Probable Cause of Death <button id="btn-cod" class="viva-btn" onclick="openViva('cod')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')">
+      <div class="pf-label">10. Probable Cause of Death <button id="btn-cod" class="viva-btn" onclick="openViva('cod', 'in-cod')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-cod" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')">
     </div>
 
     <div class="pf-item">
-      <div class="pf-label">11. Probable Time Since Death <button id="btn-time" class="viva-btn" onclick="openViva('time')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-time'); checkUnlock(this, 'btn-time')">
+      <div class="pf-label">11. Probable Time Since Death <button id="btn-time" class="viva-btn" onclick="openViva('time', 'in-time')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-time" class="sel-ok" oninput="showFollowUp('fu-time'); checkUnlock(this, 'btn-time')">
       <div id="fu-time" class="pf-followup">
         <div class="pf-followup-label">↳ Explain why this indicates this time since death</div>
         <input type="text" class="sel-ok">
@@ -349,8 +352,8 @@ td input[type="text"]:focus { background: #1e293b; }
     </div>
 
     <div class="pf-item">
-      <div class="pf-label">12. Manner of Separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep')" disabled>❓ Viva</button></div>
-      <input type="text" class="sel-ok" oninput="showFollowUp('fu-sep'); checkUnlock(this, 'btn-sep')">
+      <div class="pf-label">12. Manner of Separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep', 'in-sep')" disabled>❓ Viva</button></div>
+      <input type="text" id="in-sep" class="sel-ok" oninput="showFollowUp('fu-sep'); checkUnlock(this, 'btn-sep')">
       <div id="fu-sep" class="pf-followup">
         <div class="pf-followup-label">↳ How do you differentiate rodent damage from carnivore damage?</div>
         <input type="text" class="sel-ok">
@@ -707,6 +710,9 @@ function renumberTable(tbodyId) {
 
 // --- VIVA UNLOCK LOGIC ---
 function checkUnlock(inputElement, btnIds) {
+  // If the input is already locked, do nothing.
+  if (inputElement.readOnly) return; 
+
   const hasText = inputElement.value.trim().length > 0;
   const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
   idsToUnlock.forEach(id => {
@@ -746,20 +752,35 @@ const qBox = document.getElementById('viva-question');
 const aBox = document.getElementById('viva-answer-box');
 const aText = document.getElementById('viva-answer-text');
 const revealBtn = document.getElementById('btn-reveal');
-let currentTrait = '';
 
-function openViva(traitId) {
+let currentTrait = '';
+let currentInputId = ''; // To track which input should be locked
+
+function openViva(traitId, inputId) {
   currentTrait = traitId;
+  currentInputId = inputId;
+  
   qBox.innerText = vivaQuestions[traitId].q;
   aBox.style.display = 'none';
   revealBtn.style.display = 'inline-block';
   modal.style.display = 'flex';
 }
+
 function revealAnswer() {
   aText.innerText = vivaQuestions[currentTrait].a;
   revealBtn.style.display = 'none';
   aBox.style.display = 'block';
+
+  // LOCK IN THE ANSWER
+  if (currentInputId) {
+    const inp = document.getElementById(currentInputId);
+    if (inp && !inp.readOnly) {
+      inp.readOnly = true;
+      inp.classList.add('sel-locked');
+    }
+  }
 }
+
 function closeViva() { modal.style.display = 'none'; }
 
 // --- FINALIZE / SUBMIT with timestamp + violation record ---
@@ -800,4 +821,4 @@ function finalizeSubmission() {
 }
 </script>
 </body>
-        </html>
+</html>
