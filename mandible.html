@@ -3,109 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSPE — 3D Mandible Sex & Age Estimation</title>
+<title>OSPE — Mandible Testing Tool</title>
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; font-size: 13px; line-height: 1.5; user-select: none; }
-.sel-ok { user-select: text; }
-.page { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
-.hdr { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
-.hdr h1 { font-size: 17px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
-#timer-bar { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px 22px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
-#timer-display { font-size: 26px; font-weight: 700; color: #4ade80; }
-.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-.card-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
-.step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
-.viewer-container { width: 100%; height: 450px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; font-size: 14px; line-height: 1.6; }
+.page { max-width: 900px; margin: 0 auto; padding: 20px; }
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.viewer-container { width: 100%; height: 500px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
 model-viewer { width: 100%; height: 100%; }
-.mv-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #475569; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 10px 20px; border-radius: 6px; border: none; background: #2563eb; color: #fff; cursor: pointer; font-weight: 600; width: 100%; }
-.lock-input { background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 16px; padding: 12px; width: 100%; margin: 10px 0; text-align: center; }
-.pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
-.pf-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-.viva-btn { background: #7c3aed; color: #fff; border: none; padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; }
-input[type="text"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; padding: 10px; width: 100%; margin-top:5px; }
+.btn { background: #2563eb; color: #fff; padding: 12px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; margin-right: 10px; margin-bottom: 10px; }
+.pin { background: #ef4444; border-radius: 50%; border: 2px solid #fff; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 700; cursor: pointer; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+td { border: 1px solid #334155; padding: 8px; }
+input { background: #0f172a; border: 1px solid #475569; color: #fff; padding: 8px; width: 100%; border-radius: 4px; }
 </style>
 </head>
 <body>
 
-<div id="lock-overlay" style="position:fixed; inset:0; background:#0f172a; z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;">
-    <div style="text-align:center; max-width:400px; width:100%; background:#1e293b; padding:30px; border-radius:16px;">
-        <h2>Mandible OSPE</h2>
-        <input type="number" id="lock-roll" placeholder="Enter Roll Number" class="lock-input">
-        <input type="password" id="student-exam-pin" placeholder="Enter Exam PIN" class="lock-input">
-        <button class="btn" onclick="unlockStudent()">Begin Assessment</button>
-        <div id="lock-error" style="color:#ef4444; margin-top:10px;"></div>
-    </div>
-</div>
-
-<div class="page" id="main-content" style="display:none">
-  <div class="hdr"><h1>Forensic Medicine — 3D Mandible Analysis</h1></div>
-  <div id="timer-bar"><div id="timer-display">20:00</div></div>
+<div class="page">
+  <div class="card">
+    <h2>Mandible Testing Controls</h2>
+    <p style="margin-bottom:15px; color:#94a3b8;">Choose a mandible to load into the 3D viewer:</p>
+    <button class="btn" onclick="loadModel('./mandible1.glb', 'Mandible Specimen 1')">Load Mandible 1</button>
+    <button class="btn" onclick="loadModel('./mandible2.glb', 'Mandible Specimen 2')">Load Mandible 2</button>
+    <div id="status-box" style="margin-top:10px; color:#60a5fa; font-weight:bold;">Current: None loaded</div>
+  </div>
 
   <div class="card">
-    <div id="assign-box" style="margin-bottom:20px; font-weight:bold; color:#3b82f6;">
-        Assigned: <span id="assign-main">—</span>
-    </div>
     <div class="viewer-container">
-      <model-viewer id="mandible-model" camera-controls interaction-prompt="none" shadow-intensity="1">
-        <div class="mv-loading">Loading 3D Model...</div>
-      </model-viewer>
+      <model-viewer id="mandible-model" camera-controls interaction-prompt="none" shadow-intensity="1"></model-viewer>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="step-badge">Assessment</span></div>
-    <div class="pf-item">
-      <div>1. Name of Bone <button class="viva-btn" onclick="alert('The mandible is the only movable bone of the skull.')">❓ Viva</button></div>
-      <input type="text" class="sel-ok">
-    </div>
-    <div class="pf-item">
-      <div>2. Sex Determination Conclusion</div>
-      <input type="text" class="sel-ok">
-    </div>
-    <div class="pf-item">
-      <div>3. Age Estimation Conclusion</div>
-      <input type="text" class="sel-ok">
-    </div>
-    <button class="btn" onclick="window.print()">🖨 Save as PDF</button>
+    <h2>Anatomical Pinning</h2>
+    <table>
+      <thead>
+        <tr><th>Pin</th><th>Landmark Name</th></tr>
+      </thead>
+      <tbody id="anatomy-table-body">
+        <tr id="empty-row"><td colspan="2" style="text-align:center;">Click on 3D model to pin</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
 <script>
-// ==========================================
-// CORRECTED PATHS
-// ==========================================
-const EXAM_PIN = '8842'; 
+let pinCount = 0;
+const mv = document.getElementById('mandible-model');
+const tbody = document.getElementById('anatomy-table-body');
 
-// Use './' to look in the local folder on GitHub Pages
-const MANDIBLE_MODELS = [
-  { id: 'Model A', file: './mandible1.glb', desc: 'Mandible Specimen 1' },
-  { id: 'Model B', file: './mandible2.glb', desc: 'Mandible Specimen 2' }
-];
-
-function assignModel(roll) {
-  let n = parseInt(roll);
-  n = ((n * 2654435761) ^ (n >> 16)) >>> 0;
-  return MANDIBLE_MODELS[n % MANDIBLE_MODELS.length];
+function loadModel(path, name) {
+  document.getElementById('status-box').innerText = "Current: " + name;
+  mv.src = path;
+  clearPins();
 }
 
-function unlockStudent() {
-  const roll = document.getElementById('lock-roll').value;
-  const pin = document.getElementById('student-exam-pin').value;
-  
-  if (pin !== EXAM_PIN) { alert('Incorrect PIN!'); return; }
-  
-  const assigned = assignModel(roll);
-  document.getElementById('assign-main').innerText = assigned.desc;
-  
-  const mv = document.getElementById('mandible-model');
-  mv.src = assigned.file; 
-  
-  document.getElementById('lock-overlay').style.display = 'none';
-  document.getElementById('main-content').style.display = 'block';
+// 3D Pinning Logic
+mv.addEventListener('click', (event) => {
+  const hit = mv.positionAndNormalFromPoint(event.clientX, event.clientY);
+  if (hit) {
+    pinCount++;
+    const pinId = 'pin-' + pinCount;
+    document.getElementById('empty-row')?.remove();
+    
+    const pin = document.createElement('button');
+    pin.className = 'pin';
+    pin.slot = 'hotspot-' + pinCount;
+    pin.dataset.position = hit.position.toString();
+    pin.innerText = pinCount;
+    mv.appendChild(pin);
+
+    const tr = document.createElement('tr');
+    tr.id = 'row-' + pinId;
+    tr.innerHTML = `<td>${pinCount}</td><td><input type="text" placeholder="Enter Landmark"></td>`;
+    tbody.appendChild(tr);
+  }
+});
+
+function clearPins() {
+  const pins = mv.querySelectorAll('.pin');
+  pins.forEach(p => p.remove());
+  tbody.innerHTML = '<tr id="empty-row"><td colspan="2" style="text-align:center;">Click on 3D model to pin</td></tr>';
+  pinCount = 0;
 }
 </script>
 </body>
