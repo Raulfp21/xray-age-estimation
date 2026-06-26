@@ -58,8 +58,6 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #
 .tab-btn.active { background: #2563eb; color: #fff; font-weight: 600; }
 .dash-section { border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #0f172a; }
 .dash-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; text-align: left; border-bottom: 1px solid #334155; padding-bottom: 6px; }
-#gen-link-box { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; padding: 10px; border-radius: 6px; font-size: 11px; word-break: break-all; text-align: left; margin-top: 10px; display: none; }
-.copy-input { width: 100%; padding: 10px; margin-top: 8px; background: #0f172a; border: 1px dashed #34d399; color: #a7f3d0; border-radius: 4px; font-family: monospace; cursor: pointer; }
 
 /* 3D Viewer & Pins */
 .viewer-container { width: 100%; height: 450px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
@@ -68,6 +66,10 @@ model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; --po
 .mv-error { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; color: #f87171; font-size: 12px; background: #000; border-radius: 8px; text-align: center; padding: 20px; flex-direction: column; gap: 6px; }
 .pin { background: #ef4444; border-radius: 50%; border: 2px solid #fff; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 0 2px rgba(239,68,68,0.4); }
 .pin:hover { background: #dc2626; transform: scale(1.2); transition: 0.1s; }
+
+#assign-box { display: none; margin-top: 12px; background: #0f172a; border: 1px solid #1d4ed8; border-radius: 10px; padding: 14px 16px; }
+#assign-box .at { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #3b82f6; margin-bottom: 6px; }
+#assign-box .am { font-size: 15px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
 
 /* Proforma Flow Elements */
 .pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
@@ -79,7 +81,6 @@ model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; --po
 /* Inputs & Tables */
 input[type="text"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 10px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
 input[type="text"]:focus, textarea:focus { border-color: #3b82f6; background: #0f172a; }
-::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 textarea { min-height: 70px; resize: vertical; }
 
 table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin: 12px 0; }
@@ -132,7 +133,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
 
 <div id="viol-overlay"></div>
 
-<!-- LOCK SCREEN & DASHBOARD -->
 <div id="lock-overlay">
   <div class="lock-box">
     <div style="font-size:36px;margin-bottom:10px">💀</div>
@@ -144,50 +144,20 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
       <button class="tab-btn" onclick="switchTab('faculty')">Faculty</button>
     </div>
 
-    <!-- STUDENT TAB -->
     <div id="tab-student">
       <div class="alert-box" id="time-alert-box">
-        Rotate, zoom and examine the 3D mandible. You have <strong>20 minutes</strong> once you begin.
+        Your 3D Mandible is automatically assigned by roll number. Every student receives a different specimen. You have <strong>20 minutes</strong> once you begin.
       </div>
       <input class="lock-input" type="number" id="lock-roll" placeholder="Roll number (1 – 251)" min="1" max="251">
       <div id="lock-error"></div>
       <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="unlockStudent()">Begin Assessment ➜</button>
     </div>
 
-    <!-- FACULTY PIN TAB -->
     <div id="tab-faculty" style="display:none">
-      <div class="alert-box">Enter faculty PIN to access the dashboard and generate scheduled exam links.</div>
+      <div class="alert-box">Enter faculty PIN to access the dashboard.</div>
       <input class="lock-input" type="password" id="faculty-pin" placeholder="PIN" style="letter-spacing:4px; max-width:140px; margin:0 auto 10px auto; display:block; padding:8px; font-size:15px;">
       <div id="faculty-error" style="font-size:12px;color:#ef4444;margin-bottom:8px;min-height:16px"></div>
       <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="loginFaculty()">Access Dashboard ➜</button>
-    </div>
-
-    <!-- FACULTY DASHBOARD TAB -->
-    <div id="tab-dashboard" style="display:none">
-      <div class="dash-section">
-        <div class="dash-title">📅 Schedule & Generate Link</div>
-        <p style="font-size:11px; color:#64748b; text-align:left; margin-bottom:12px;">Generate a URL that strictly limits when students can access the OSPE. Share this link on WhatsApp or Classroom.</p>
-        <div class="field-grid">
-          <div class="field">
-            <label>Start Time</label>
-            <input type="datetime-local" id="sched-start">
-          </div>
-          <div class="field">
-            <label>End Time</label>
-            <input type="datetime-local" id="sched-end">
-          </div>
-        </div>
-        <button class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center" onclick="generateLink()">Generate & Copy Link 🔗</button>
-        <div id="gen-link-box"></div>
-      </div>
-
-      <div class="dash-section" style="margin-bottom:0">
-        <div class="dash-title">👁 Preview Assessment</div>
-        <div class="field" style="margin-bottom:10px;">
-          <input type="number" id="faculty-roll" placeholder="Enter Roll Number to preview (1-251)" min="1" max="251" class="lock-input" style="padding:10px; font-size:14px">
-        </div>
-        <button class="btn" style="width:100%; justify-content:center" onclick="unlockFaculty()">Preview Mandible as Faculty ➜</button>
-      </div>
     </div>
   </div>
 </div>
@@ -201,7 +171,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
     </div>
   </div>
 
-  <!-- TIMER -->
   <div id="timer-bar">
     <div>
       <div id="timer-label">Time remaining</div>
@@ -218,13 +187,16 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
 
   <div class="card">
     <div class="field-grid">
-      <div class="field"><label>Student Name</label><input type="text" id="s-name" class="sel-ok"></div>
+      <div class="field"><label>Student Name</label><input type="text" id="s-name" class="sel-ok" autocomplete="off"></div>
       <div class="field"><label>Roll Number</label><input type="text" id="s-roll" readonly style="opacity:0.6"></div>
       <div class="field"><label>Date</label><input type="date" id="s-date" class="sel-ok"></div>
     </div>
+    <div id="assign-box">
+      <div class="at">Your Assigned 3D Specimen</div>
+      <div class="am" id="assign-main">—</div>
+    </div>
   </div>
 
-  <!-- STEP 1: 3D ANATOMY -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 1</span> 3D Anatomical Identification</div>
     <div id="instruction-box" style="background:#1e3a8a; border:1px solid #3b82f6; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#bfdbfe;">
@@ -233,7 +205,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
 
     <div class="viewer-container">
       <model-viewer id="mandible-model"
-        src="mandible.glb"
         camera-controls
         interaction-prompt="zoom"
         shadow-intensity="1">
@@ -241,7 +212,7 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
       </model-viewer>
       <div class="mv-error" id="mv-error">
         ⚠ Could not load the 3D model.<br>
-        <span style="font-size:11px;color:#94a3b8">Check that mandible.glb is published at the GitHub URL.</span>
+        <span style="font-size:11px;color:#94a3b8">Check that the .glb files are in the same folder as this HTML file.</span>
       </div>
     </div>
 
@@ -255,7 +226,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
     <img id="snapshot-print" alt="3D mandible snapshot with pins">
   </div>
 
-  <!-- STEP 2: GUIDED PROFORMA FLOW -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 2</span> Progressive 12-Point Assessment</div>
 
@@ -287,7 +257,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
       <input type="text" id="in-number" class="sel-ok" oninput="checkUnlock(this, 'btn-number')">
     </div>
 
-    <!-- 5. SEX DETERMINATION -->
     <div class="pf-item" style="border-color: #3b82f6;">
       <div class="pf-label" style="color:#60a5fa;">5. Sex Determination
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -310,7 +279,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
       </div>
     </div>
 
-    <!-- 6. AGE ESTIMATION -->
     <div class="pf-item" style="border-color: #3b82f6;">
       <div class="pf-label" style="color:#60a5fa;">6. Age Estimation
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -361,7 +329,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
     </div>
   </div>
 
-  <!-- STEP 3: OPINION -->
   <div class="card">
     <div class="card-title"><span class="step-badge">Step 3</span> Final Opinion</div>
     <textarea class="sel-ok" id="final-opinion"></textarea>
@@ -375,7 +342,6 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
   <button class="btn btn-primary" style="width:100%;padding:14px;justify-content:center" onclick="finalizeSubmission()">🖨 Finalize &amp; Save as PDF</button>
 </div>
 
-<!-- VIVA FLASHCARD MODAL -->
 <div id="viva-modal">
   <div class="viva-box">
     <button class="close-modal" onclick="closeViva()">✕</button>
@@ -389,39 +355,27 @@ input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; co
 </div>
 
 <script>
+// ==========================================
+// CONFIGURATION
+// ==========================================
 const FACULTY_PIN = '2593';
-const EXAM_SECONDS = 20 * 60;
+const EXAM_SECONDS = 20 * 60; // 20 minutes
+
+// 3D MODELS ARRAY (Point these directly to your GitHub URLs)
+const MANDIBLE_MODELS = [
+  { id: 'Model A', file: 'https://raulfp21.github.io/xray-age-estimation/mandible1.glb', desc: 'Mandible Specimen 1' },
+  { id: 'Model B', file: 'https://raulfp21.github.io/xray-age-estimation/mandible2.glb', desc: 'Mandible Specimen 2' }
+];
+
+let assignedModel = null;
 let isFaculty = false;
 let startTime = null;
 let timerInterval = null;
 let secondsLeft = EXAM_SECONDS;
 
-// URL Scheduling
-let enforcedStart = null;
-let enforcedEnd = null;
-
 // Violations
 let violations = [];
 let tabSwitchCount = 0, fsExitCount = 0, devtoolsCount = 0, devtoolsOpen = false;
-
-window.addEventListener('DOMContentLoaded', () => {
-  addRow('sex-table-body', 4); addRow('sex-table-body', 4);
-  addRow('age-table-body', 3); addRow('age-table-body', 3);
-
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('start') && urlParams.has('end')) {
-    enforcedStart = new Date(parseInt(urlParams.get('start')));
-    enforcedEnd = new Date(parseInt(urlParams.get('end')));
-    
-    const alertBox = document.getElementById('time-alert-box');
-    if (alertBox) {
-      alertBox.innerHTML = `<strong>Scheduled Exam Window Active:</strong><br>
-      Opens: ${enforcedStart.toLocaleString('en-IN')}<br>
-      Closes: ${enforcedEnd.toLocaleString('en-IN')}<br><br>
-      You will have <strong>20 minutes</strong> to complete the OSPE once you log in.`;
-    }
-  }
-});
 
 function timeStr() { return new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}); }
 function flashRed() { const ov = document.getElementById('viol-overlay'); ov.style.display = 'block'; setTimeout(() => { ov.style.display = 'none'; }, 600); }
@@ -433,13 +387,13 @@ function logViolation(msg) {
   list.innerHTML = violations.map(v => '<br>• ' + v).join('');
 }
 
+// ── Anti-Cheat ─────────────────────────────────────────────
 window.addEventListener('beforeunload', function (e) {
-  if (!isFaculty && startTime && secondsLeft > 0) {
+  if (assignedModel && !isFaculty && secondsLeft > 0) {
     e.preventDefault();
     e.returnValue = ''; 
   }
 });
-
 document.addEventListener('visibilitychange', () => {
   if (isFaculty || !startTime) return;
   if (document.hidden) {
@@ -448,7 +402,6 @@ document.addEventListener('visibilitychange', () => {
     flashRed();
   }
 });
-
 function requestFS() {
   const el = document.documentElement;
   if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
@@ -495,77 +448,11 @@ document.addEventListener('contextmenu', e => {
   });
 });
 
-// --- FACULTY DASHBOARD LOGIC ---
+// ── Faculty Dashboard Logic ────────────────────────────────
 function switchTab(tab) {
   document.getElementById('tab-student').style.display = tab === 'student' ? 'block' : 'none';
   document.getElementById('tab-faculty').style.display = tab === 'faculty' ? 'block' : 'none';
-  document.getElementById('tab-dashboard').style.display = 'none';
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0) === (tab==='student')));
-}
-
-function loginFaculty() {
-  const pin = document.getElementById('faculty-pin').value.trim();
-  const err = document.getElementById('faculty-error');
-  if (pin !== FACULTY_PIN) { err.textContent = 'Incorrect PIN.'; return; }
-  err.textContent = '';
-  document.getElementById('tab-faculty').style.display = 'none';
-  document.getElementById('tab-dashboard').style.display = 'block';
-  document.querySelectorAll('.tab-btn')[1].textContent = "Faculty Dashboard";
-}
-
-function fallbackCopyTextToClipboard(text) {
-  var textArea = document.createElement("textarea");
-  textArea.value = text;
-  textArea.style.top = "0"; textArea.style.left = "0"; textArea.style.position = "fixed";
-  document.body.appendChild(textArea);
-  textArea.focus(); textArea.select();
-  try { return document.execCommand('copy'); } catch (err) { return false; } finally { document.body.removeChild(textArea); }
-}
-
-function generateLink() {
-  const sDate = document.getElementById('sched-start').value;
-  const eDate = document.getElementById('sched-end').value;
-  const box = document.getElementById('gen-link-box');
-  if (!sDate || !eDate) { showBoxError("⚠ Please select both a start and end time."); return; }
-  const sTime = new Date(sDate).getTime();
-  const eTime = new Date(eDate).getTime();
-  if (eTime <= sTime) { showBoxError("⚠ End time must be after start time."); return; }
-
-  const currentUrl = window.location.href.split('?')[0];
-  const finalUrl = `${currentUrl}?start=${sTime}&end=${eTime}`;
-
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(finalUrl).then(() => showBoxSuccess(finalUrl))
-    .catch(err => { if (fallbackCopyTextToClipboard(finalUrl)) showBoxSuccess(finalUrl); else showBoxManual(finalUrl); });
-  } else {
-    if (fallbackCopyTextToClipboard(finalUrl)) showBoxSuccess(finalUrl); else showBoxManual(finalUrl);
-  }
-
-  function showBoxError(msg) {
-    box.style.display = 'block'; box.style.background = '#7f1d1d'; box.style.borderColor = '#ef4444'; box.style.color = '#fca5a5'; box.textContent = msg;
-  }
-  function showBoxSuccess(url) {
-    box.style.display = 'block'; box.style.background = '#064e3b'; box.style.borderColor = '#059669'; box.style.color = '#a7f3d0';
-    box.innerHTML = `<strong>✓ Copied to clipboard!</strong><br><br>Share this exact link with students:<br><br><input type="text" class="copy-input" value="${url}" readonly onclick="this.select()">`;
-  }
-  function showBoxManual(url) {
-    box.style.display = 'block'; box.style.background = '#1e3a8a'; box.style.borderColor = '#2563eb'; box.style.color = '#bfdbfe';
-    box.innerHTML = `<strong>Link generated!</strong> Auto-copy blocked by browser.<br><br>Click the box below and press Ctrl+C to copy manually:<br><br><input type="text" class="copy-input" style="border-color:#60a5fa" value="${url}" readonly onclick="this.select()">`;
-  }
-}
-
-function checkTimeWindow(errEl) {
-  if (!enforcedStart || !enforcedEnd) return true; 
-  const now = new Date();
-  if (now < enforcedStart) {
-    errEl.textContent = 'Access Denied: The exam has not started yet. Opens at ' + enforcedStart.toLocaleTimeString('en-IN');
-    return false;
-  }
-  if (now > enforcedEnd) {
-    errEl.textContent = 'Access Denied: The exam window has concluded.';
-    return false;
-  }
-  return true;
 }
 
 function unlockStudent() {
@@ -576,13 +463,13 @@ function unlockStudent() {
     err.textContent = 'Please enter a valid roll number between 1 and 251.';
     return;
   }
-  if (!checkTimeWindow(err)) return;
   if (localStorage.getItem('ospe_completed_mand_' + n)) {
-    err.textContent = 'Access Denied: You have already completed the exam on this device.';
+    err.textContent = 'Access Denied: Already completed.';
     return;
   }
   err.textContent = '';
   isFaculty = false;
+  assignedModel = assignModel(n);
   document.getElementById('s-roll').value = n;
   localStorage.setItem('ospe_started_mand_' + n, 'true');
   launch();
@@ -590,15 +477,26 @@ function unlockStudent() {
   setTimeout(requestFS, 300);
 }
 
+function assignModel(roll) {
+  let n = parseInt(roll);
+  n = ((n * 2654435761) ^ (n >> 16)) >>> 0;
+  n = (n ^ (n * 1597334677)) >>> 0;
+  return MANDIBLE_MODELS[n % MANDIBLE_MODELS.length];
+}
+
 function unlockFaculty() {
+  const pin = document.getElementById('faculty-pin').value.trim();
+  const err = document.getElementById('faculty-error');
+  if (pin !== FACULTY_PIN) { err.textContent = 'Incorrect PIN.'; return; }
+  err.textContent = '';
   const val = document.getElementById('faculty-roll').value.trim();
   const n = parseInt(val);
-  if (val && (isNaN(n) || n < 1 || n > 251)) { alert('Enter a valid roll number or leave blank.'); return; }
   isFaculty = true;
-  document.getElementById('s-roll').value = val ? (n + ' (Faculty Preview)') : 'Faculty Preview';
+  assignedModel = val ? assignModel(n) : MANDIBLE_MODELS[0];
+  document.getElementById('s-roll').value = val ? n + ' (Faculty Preview)' : 'Faculty Preview';
   document.getElementById('preview-badge').style.display = 'inline-block';
   document.getElementById('timer-bar').style.opacity = '0.4';
-  document.getElementById('timer-label').textContent = 'Timer disabled (Faculty Preview)';
+  document.getElementById('timer-label').textContent = 'Timer disabled (Faculty)';
   launch();
 }
 
@@ -607,6 +505,11 @@ function launch() {
   document.getElementById('main-content').style.display = 'block';
   const d = new Date();
   document.getElementById('s-date').value = d.toISOString().slice(0,10);
+  const ab = document.getElementById('assign-box');
+  ab.style.display = 'block';
+  document.getElementById('assign-main').textContent = assignedModel.desc;
+  const mv = document.getElementById('mandible-model');
+  mv.src = assignedModel.file;
 }
 
 function startTimer() {
@@ -624,12 +527,11 @@ function tickTimer() {
   disp.textContent = m + ':' + s;
   fill.style.width = (secondsLeft / EXAM_SECONDS * 100) + '%';
   disp.className = secondsLeft <= 120 ? 'danger' : secondsLeft <= 300 ? 'warn' : '';
-  fill.style.background = secondsLeft <= 120 ? '#ef4444' : secondsLeft <= 300 ? '#fbbf24' : '#4ade80';
   if (secondsLeft === 0) {
     clearInterval(timerInterval);
     logViolation('⏰ Time expired — exam ended at ' + timeStr());
     if (!isFaculty) localStorage.setItem('ospe_completed_mand_' + document.getElementById('s-roll').value, 'true');
-    alert('Time is up! Please save your PDF immediately.');
+    alert('Time is up!');
   }
 }
 
@@ -710,9 +612,7 @@ function renumberTable(tbodyId) {
 
 // --- VIVA UNLOCK LOGIC ---
 function checkUnlock(inputElement, btnIds) {
-  // If the input is already locked, do nothing.
   if (inputElement.readOnly) return; 
-
   const hasText = inputElement.value.trim().length > 0;
   const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
   idsToUnlock.forEach(id => {
@@ -731,20 +631,20 @@ function checkUnlock(inputElement, btnIds) {
 
 // --- VIVA QUESTION BANK ---
 const vivaQuestions = {
-  bone: { q: "How do you definitively confirm that a small, dirty fragment is actually a human bone and not a stone or piece of wood?", a: "Anatomical shape and structure usually help. If it is a small or ambiguous fragment, histological examination is the definitive test — true bone reveals characteristic Haversian systems." },
-  name: { q: "What anatomical landmarks would you use to confirm this bone is a mandible and not any other bone?", a: "The mandible is identified by its horseshoe-shaped body with two vertical rami, the symphysis menti at the midline, the mental foramen on each side of the body, and the condyloid and coronoid processes." },
-  human: { q: "If a bone is old and dry, how do you differentiate it from a non-human animal bone?", a: "By microscopic examination. Non-human animal bones contain 'plexiform structures' in their cross-section, whereas human bones do not. They can also be distinguished by chemical analysis of bone-ash." },
-  number: { q: "If several mandibular fragments are found together, how would you determine if they belong to one individual or more?", a: "Reconstruct and check for disproportion in size or reduplication of parts. If the age, sex, and general morphology are consistent across all fragments with no duplication, they likely belong to one individual." },
-  chin: { q: "Describe the difference in the shape of the chin (symphysis menti) between male and female mandibles.", a: "The male chin typically has a broad, square (U-shaped) appearance. The female chin is typically narrower and rounded." },
-  gonial: { q: "Describe the typical angle of the mandible (gonion) in males versus females.", a: "In males, the gonial angle is less obtuse (under 125°), prominent, and everted (flares outward) due to strong masseter muscle pull. In females, it is more obtuse, not prominent, and inverted or straight." },
-  ramus: { q: "How does the breadth of the ascending ramus help distinguish male from female mandibles?", a: "The ascending ramus has greater breadth in males, reflecting the overall larger and more robust mandible. In females, the ramus is narrower." },
-  tubercle: { q: "What is the mental tubercle and how does it differ between sexes?", a: "The mental tubercle is a bony prominence near the chin. In males it is large and prominent due to stronger muscle attachment; in females it is insignificant or barely noticeable." },
-  age: { q: "How does the position of the mental foramen change from infancy to old age?", a: "In infancy, it opens near the lower margin. In adults, it is located midway between upper and lower margins. In old age, as teeth are lost and alveolar bone resorbs, it migrates near the upper (alveolar) margin." },
-  thirdmolar: { q: "What does full eruption of the third molar (wisdom tooth) tell you about minimum age?", a: "If the third molars are fully erupted, the individual is generally above 17 years of age." },
-  ident: { q: "Besides teeth, what other features on a mandible can help establish personal identity?", a: "Old healed fractures, surgical implants or plates, dental work visible on X-ray, unique pathology (cysts, tumours), and comparison with antemortem dental records." },
-  cod: { q: "Can you easily determine the cause of death from a skeletonized mandible alone? What specific signs do you look for?", a: "No, cause of death cannot usually be determined from the mandible alone unless there is evidence of fatal injury such as fracture, marks of burning, or deep weapon cuts." },
-  time: { q: "What gross features of bone help you estimate roughly how long ago death occurred?", a: "A fairly recent bone is slightly greasy, heavy, and may retain odor. Cartilage and ligaments can remain attached for 3–4 months or more. Ancient bone is dry, brittle, chalky, and light." },
-  sep: { q: "How do you differentiate rodent damage from carnivore damage on skeletal remains?", a: "Rodents leave characteristic parallel grooves called 'chisel marks' due to gnawing. Carnivores (dogs, foxes, wolves) cause heavier damage, leaving punctures, pits, and furrows." }
+  bone: { q: "How do you definitively confirm that a small, dirty fragment is actually a human bone and not a stone or piece of wood?", a: "Histological examination reveals Haversian systems unique to bone. Bone also has a specific gravity of about 2." },
+  name: { q: "What anatomical landmarks would you use to confirm this bone is a mandible?", a: "Horseshoe body, symphysis menti, mental foramen, and condyloid/coronoid processes." },
+  human: { q: "If a bone is old and dry, how do you differentiate it from a non-human animal bone?", a: "Microscopic examination reveals Haversian systems in humans vs. plexiform structures in most animals." },
+  number: { q: "If several mandibular fragments are found together, how would you determine if they belong to one individual or more?", a: "Reconstruct the fragments; look for reduplication of parts (e.g., two left condyles) or inconsistency in size/age." },
+  chin: { q: "Describe the chin shape between male and female mandibles.", a: "Male: Broad, square (U-shaped). Female: Narrower and rounded." },
+  gonial: { q: "Describe the gonial angle in males versus females.", a: "Male: Under 125°, everted. Female: More obtuse, inverted or straight." },
+  ramus: { q: "How does the ascending ramus help distinguish sex?", a: "Males have greater breadth and robustness compared to the narrower female ramus." },
+  tubercle: { q: "What is the mental tubercle?", a: "A bony prominence near the chin. Prominent in males; insignificant in females." },
+  age: { q: "How does the position of the mental foramen change with age?", a: "Infancy: Near lower margin. Adult: Midway. Old age: Near upper (alveolar) margin due to resorption." },
+  thirdmolar: { q: "Third molar significance?", a: "Eruption usually indicates age >17 years." },
+  ident: { q: "Besides teeth, what other features establish identity?", a: "Old fractures, surgical implants, unique pathology, or dental records." },
+  cod: { q: "Can you determine cause of death from mandible?", a: "Rarely, unless there is direct trauma evidence like fractures or tool marks." },
+  time: { q: "Time since death markers?", a: "Recent: greasy, heavy. Ancient: dry, brittle, chalky." },
+  sep: { q: "Rodent vs Carnivore damage?", a: "Rodent: Parallel grooves (chisel marks). Carnivore: Punctures, pits, and furrows." }
 };
 
 const modal = document.getElementById('viva-modal');
@@ -754,24 +654,20 @@ const aText = document.getElementById('viva-answer-text');
 const revealBtn = document.getElementById('btn-reveal');
 
 let currentTrait = '';
-let currentInputId = ''; // To track which input should be locked
+let currentInputId = '';
 
 function openViva(traitId, inputId) {
   currentTrait = traitId;
   currentInputId = inputId;
-  
   qBox.innerText = vivaQuestions[traitId].q;
   aBox.style.display = 'none';
   revealBtn.style.display = 'inline-block';
   modal.style.display = 'flex';
 }
-
 function revealAnswer() {
   aText.innerText = vivaQuestions[currentTrait].a;
   revealBtn.style.display = 'none';
   aBox.style.display = 'block';
-
-  // LOCK IN THE ANSWER
   if (currentInputId) {
     const inp = document.getElementById(currentInputId);
     if (inp && !inp.readOnly) {
@@ -780,45 +676,26 @@ function revealAnswer() {
     }
   }
 }
-
 function closeViva() { modal.style.display = 'none'; }
 
-// --- FINALIZE / SUBMIT with timestamp + violation record ---
 function finalizeSubmission() {
   const name = document.getElementById('s-name').value.trim();
   const roll = document.getElementById('s-roll').value.trim();
-  if (!isFaculty && !name) { alert('Please enter your name before submitting.'); return; }
-
+  if (!isFaculty && !name) { alert('Please enter your name.'); return; }
   const now = new Date();
   const ts = now.toLocaleString('en-IN', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
   const elapsed = startTime ? Math.floor((Date.now() - startTime) / 60000) : null;
-
-  if (!isFaculty) {
-    localStorage.setItem('ospe_completed_mand_' + roll, 'true');
-  }
-
+  if (!isFaculty) localStorage.setItem('ospe_completed_mand_' + roll, 'true');
   const tsBar = document.getElementById('ts-bar');
-  let violText = '';
-  if (!isFaculty) {
-    violText = violations.length
-      ? `<span style="color:#fca5a5"><strong>⚠ ${violations.length} violation(s) recorded</strong></span>`
-      : `<span style="color:#86efac">✓ No integrity violations detected</span>`;
-  }
-  tsBar.innerHTML = `
-    <span><strong>Submission timestamp:</strong> ${ts}</span>
-    <span>Roll: ${roll} | Time taken: ${elapsed !== null ? elapsed + ' min' : 'N/A (Faculty)'}</span>
-    <span>${violText}</span>`;
-
+  let violText = violations.length ? `<span style="color:#fca5a5"><strong>⚠ ${violations.length} violation(s)</strong></span>` : `<span style="color:#86efac">✓ No violations</span>`;
+  tsBar.innerHTML = `<span><strong>Submitted:</strong> ${ts}</span><span>Roll: ${roll} | Time: ${elapsed !== null ? elapsed + 'm' : 'N/A'}</span><span>${violText}</span>`;
   try {
     const dataUrl = modelViewer.toDataURL('image/png');
     const imgEl = document.getElementById('snapshot-print');
     imgEl.src = dataUrl;
-  } catch (e) {
-    console.warn('Could not capture 3D snapshot for print:', e);
-  }
-
+  } catch (e) { console.warn('3D snapshot failed:', e); }
   setTimeout(() => window.print(), 200);
 }
 </script>
 </body>
-</html>
+  </html>
