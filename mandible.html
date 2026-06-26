@@ -11,691 +11,102 @@
 body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; font-size: 13px; line-height: 1.5; user-select: none; }
 .sel-ok { user-select: text; }
 .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
-
-/* Header */
 .hdr { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
 .hdr h1 { font-size: 17px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
-.hdr p { font-size: 12px; color: #64748b; }
-.preview-badge { display: inline-block; background: #7c3aed; color: #ede9fe; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
-
-/* Timer */
-#timer-bar { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px 22px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-#timer-display { font-size: 26px; font-weight: 700; color: #4ade80; font-variant-numeric: tabular-nums; letter-spacing: 2px; }
-#timer-display.warn { color: #fbbf24; }
-#timer-display.danger { color: #ef4444; animation: pulse 1s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-#timer-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; }
-.timer-track { flex: 1; height: 6px; background: #334155; border-radius: 999px; overflow: hidden; max-width: 300px; }
-#timer-fill { height: 100%; background: #4ade80; border-radius: 999px; transition: width 1s linear, background 1s; }
-
-/* Violation banner */
-#viol-banner { display: none; background: #7f1d1d; border: 1px solid #ef4444; border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #fca5a5; line-height: 1.6; }
-#viol-banner strong { color: #ef4444; display: block; margin-bottom: 2px; }
-#viol-overlay { display: none; position: fixed; inset: 0; background: rgba(127,29,29,0.6); z-index: 150; backdrop-filter: blur(2px); pointer-events: none; }
-
-/* Cards */
+#timer-bar { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px 22px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+#timer-display { font-size: 26px; font-weight: 700; color: #4ade80; }
 .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
 .card-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
 .step-badge { background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
-
-/* Candidate Details */
-.field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
-@media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field label { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
-
-/* Lock screen & Dashboard */
-#lock-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.96); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(4px); overflow-y:auto; padding:20px; }
-.lock-box { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px 36px; max-width: 460px; width: 100%; text-align: center; margin:auto; }
-.lock-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #f1f5f9; }
-.lock-box p { font-size: 13px; color: #64748b; margin-bottom: 16px; }
-.lock-input { background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 16px; padding: 10px 14px; width: 100%; outline: none; text-align: center; letter-spacing: 2px; margin-bottom: 10px; }
-.lock-input:focus { border-color: #3b82f6; }
-#lock-error { font-size: 12px; color: #ef4444; margin-bottom: 8px; min-height: 16px; }
-.alert-box { background: #1e3a5f; border: 1px solid #1d4ed8; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #93c5fd; margin-bottom: 14px; text-align: left; line-height:1.5; }
-.tab-faculty { display: flex; gap: 0; margin-bottom: 20px; border: 1px solid #334155; border-radius: 8px; overflow: hidden; }
-.tab-btn { flex: 1; padding: 9px; font-size: 13px; border: none; background: transparent; color: #94a3b8; cursor: pointer; transition: all 0.15s; }
-.tab-btn.active { background: #2563eb; color: #fff; font-weight: 600; }
-.dash-section { border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #0f172a; }
-.dash-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; text-align: left; border-bottom: 1px solid #334155; padding-bottom: 6px; }
-
-/* 3D Viewer & Pins */
 .viewer-container { width: 100%; height: 450px; background: #000; border-radius: 8px; border: 1px solid #334155; margin-bottom: 16px; position: relative; }
-model-viewer { width: 100%; height: 100%; outline: none; cursor: crosshair; --poster-color: transparent; }
-.mv-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 12px; background: #000; border-radius: 8px; flex-direction: column; gap: 8px; pointer-events: none; }
-.mv-error { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; color: #f87171; font-size: 12px; background: #000; border-radius: 8px; text-align: center; padding: 20px; flex-direction: column; gap: 6px; }
-.pin { background: #ef4444; border-radius: 50%; border: 2px solid #fff; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; cursor: pointer; box-shadow: 0 0 0 2px rgba(239,68,68,0.4); }
-.pin:hover { background: #dc2626; transform: scale(1.2); transition: 0.1s; }
-
-#assign-box { display: none; margin-top: 12px; background: #0f172a; border: 1px solid #1d4ed8; border-radius: 10px; padding: 14px 16px; }
-#assign-box .at { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #3b82f6; margin-bottom: 6px; }
-#assign-box .am { font-size: 15px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
-
-/* Proforma Flow Elements */
+model-viewer { width: 100%; height: 100%; }
+.mv-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #475569; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 10px 20px; border-radius: 6px; border: none; background: #2563eb; color: #fff; cursor: pointer; font-weight: 600; width: 100%; }
+.lock-input { background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 16px; padding: 12px; width: 100%; margin: 10px 0; text-align: center; }
 .pf-item { margin-bottom: 20px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; }
-.pf-label { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-.pf-followup { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #334155; animation: slideDown 0.3s ease-out; }
-.pf-followup-label { font-size: 12px; font-weight: 600; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Inputs & Tables */
-input[type="text"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; font-size: 13px; padding: 10px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
-input[type="text"]:focus, textarea:focus { border-color: #3b82f6; background: #0f172a; }
-textarea { min-height: 70px; resize: vertical; }
-
-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; background: #0f172a; border-radius: 6px; overflow: hidden; margin: 12px 0; }
-th { background: #334155; padding: 8px; text-align: left; font-weight: 600; font-size: 11px; border: 1px solid #1e293b; color: #f1f5f9; text-transform: uppercase; }
-td { border: 1px solid #334155; padding: 4px 6px; vertical-align: top; }
-td input[type="text"] { background: transparent; border: none; border-radius: 0; padding: 6px; }
-td input[type="text"]:focus { background: #1e293b; }
-.td-center { text-align: center; font-weight: 700; color: #94a3b8; vertical-align: middle; }
-
-/* Buttons & Viva Logic */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; padding: 8px 18px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; transition: all 0.15s; }
-.btn:hover { background: #334155; }
-.btn-sm { font-size: 11px; padding: 5px 12px; margin-bottom: 8px; background: transparent; border: 1px dashed #475569; color: #94a3b8; }
-.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
-.viva-btn { background: #7c3aed; color: #ede9fe; border: none; padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
-.viva-btn:not(:disabled):hover { background: #6d28d9; transform: translateY(-1px); }
-.viva-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; opacity: 0.6; }
-.viva-hint { font-size: 10px; color: #f59e0b; font-style: italic; margin-right: 4px; }
-.del-btn { background: transparent; border: none; color: #ef4444; font-size: 14px; cursor: pointer; width: 100%; height: 100%; padding: 6px 0; }
-
-/* Locked Input styling */
-input[readonly].sel-locked { background: #0f172a; border: 1px dashed #334155; color: #94a3b8; cursor: not-allowed; }
-
-/* Flashcard Modal */
-#viva-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
-.viva-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px; position: relative; text-align: center; }
-.close-modal { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #64748b; font-size: 18px; cursor: pointer; }
-.viva-q { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 24px; line-height: 1.5; text-align: left; }
-.btn-reveal { background: #10b981; color: #fff; font-weight: 700; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.2s; }
-.btn-reveal:hover { background: #059669; }
-.viva-answer-box { display: none; margin-top: 20px; padding: 16px; background: #0f172a; border: 1px solid #3b82f6; border-radius: 8px; text-align: left; }
-.viva-a-title { font-size: 11px; color: #60a5fa; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
-.viva-a-text { font-size: 14px; color: #e2e8f0; line-height: 1.6; }
-
-@media print {
-  body { background: #fff; color: #000; padding: 0; }
-  .page { max-width: 100%; padding: 0; margin: 0; }
-  .hdr { border-color: #ccc; background: #f8f9fa; }
-  .hdr h1 { color: #000; }
-  .card, .pf-item { border: 1px solid #ccc; background: #fff; break-inside: avoid; }
-  input[type="text"], textarea { border: none !important; border-bottom: 1px dashed #999 !important; background: transparent !important; color: #000 !important; }
-  .viewer-container, .btn, .btn-sm, .viva-btn, .viva-hint, #instruction-box, .del-col, #timer-bar, #lock-overlay { display: none !important; }
-  .pf-followup { display: block !important; border-top-color: #ccc; }
-  #snapshot-print { display: block !important; max-width: 380px; border: 1px solid #ccc; margin-bottom: 10px; }
-}
-#snapshot-print { display: none; }
+.pf-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.viva-btn { background: #7c3aed; color: #fff; border: none; padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; }
+input[type="text"], textarea { background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #f1f5f9; padding: 10px; width: 100%; margin-top:5px; }
 </style>
 </head>
 <body>
 
-<div id="viol-overlay"></div>
-
-<div id="lock-overlay">
-  <div class="lock-box">
-    <div style="font-size:36px;margin-bottom:10px">💀</div>
-    <h2>OSPE — 3D Mandible Practical</h2>
-    <p>Skeletal Remains — Sex &amp; Age Estimation</p>
-
-    <div class="tab-faculty">
-      <button class="tab-btn active" onclick="switchTab('student')">Student</button>
-      <button class="tab-btn" onclick="switchTab('faculty')">Faculty</button>
+<div id="lock-overlay" style="position:fixed; inset:0; background:#0f172a; z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div style="text-align:center; max-width:400px; width:100%; background:#1e293b; padding:30px; border-radius:16px;">
+        <h2>Mandible OSPE</h2>
+        <input type="number" id="lock-roll" placeholder="Enter Roll Number" class="lock-input">
+        <input type="password" id="student-exam-pin" placeholder="Enter Exam PIN" class="lock-input">
+        <button class="btn" onclick="unlockStudent()">Begin Assessment</button>
+        <div id="lock-error" style="color:#ef4444; margin-top:10px;"></div>
     </div>
-
-    <div id="tab-student">
-      <div class="alert-box" id="time-alert-box">
-        Your 3D Mandible is automatically assigned by roll number. Every student receives a different specimen. You have <strong>20 minutes</strong> once you begin.
-      </div>
-      <input class="lock-input" type="number" id="lock-roll" placeholder="Roll number (1 – 251)" min="1" max="251">
-      <div id="lock-error"></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="unlockStudent()">Begin Assessment ➜</button>
-    </div>
-
-    <div id="tab-faculty" style="display:none">
-      <div class="alert-box">Enter faculty PIN to access the dashboard.</div>
-      <input class="lock-input" type="password" id="faculty-pin" placeholder="PIN" style="letter-spacing:4px; max-width:140px; margin:0 auto 10px auto; display:block; padding:8px; font-size:15px;">
-      <div id="faculty-error" style="font-size:12px;color:#ef4444;margin-bottom:8px;min-height:16px"></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="loginFaculty()">Access Dashboard ➜</button>
-    </div>
-  </div>
 </div>
 
 <div class="page" id="main-content" style="display:none">
-  <div class="hdr">
-    <div style="font-size:28px">💀</div>
-    <div>
-      <h1>Forensic Medicine — OSPE Practical Proforma<span id="preview-badge" class="preview-badge" style="display:none">FACULTY PREVIEW</span></h1>
-      <p>Skeletal Remains: 3D Mandible Analysis, Sex &amp; Age Estimation</p>
-    </div>
-  </div>
-
-  <div id="timer-bar">
-    <div>
-      <div id="timer-label">Time remaining</div>
-      <div id="timer-display">20:00</div>
-    </div>
-    <div class="timer-track"><div id="timer-fill" style="width:100%"></div></div>
-    <button class="btn btn-primary" onclick="finalizeSubmission()">🖨 Save as PDF</button>
-  </div>
-
-  <div id="viol-banner">
-    <strong>⚠ Academic integrity violation(s) detected — this will be recorded in your PDF</strong>
-    <span id="viol-list"></span>
-  </div>
+  <div class="hdr"><h1>Forensic Medicine — 3D Mandible Analysis</h1></div>
+  <div id="timer-bar"><div id="timer-display">20:00</div></div>
 
   <div class="card">
-    <div class="field-grid">
-      <div class="field"><label>Student Name</label><input type="text" id="s-name" class="sel-ok" autocomplete="off"></div>
-      <div class="field"><label>Roll Number</label><input type="text" id="s-roll" readonly style="opacity:0.6"></div>
-      <div class="field"><label>Date</label><input type="date" id="s-date" class="sel-ok"></div>
+    <div id="assign-box" style="margin-bottom:20px; font-weight:bold; color:#3b82f6;">
+        Assigned: <span id="assign-main">—</span>
     </div>
-    <div id="assign-box">
-      <div class="at">Your Assigned 3D Specimen</div>
-      <div class="am" id="assign-main">—</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="step-badge">Step 1</span> 3D Anatomical Identification</div>
-    <div id="instruction-box" style="background:#1e3a8a; border:1px solid #3b82f6; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#bfdbfe;">
-      <strong>Instructions:</strong> Drag to rotate. Scroll/Pinch to zoom. <strong>Click exactly on the bone surface to drop a pin.</strong>
-    </div>
-
     <div class="viewer-container">
-      <model-viewer id="mandible-model"
-        camera-controls
-        interaction-prompt="zoom"
-        shadow-intensity="1">
-        <div class="mv-loading" id="mv-loading">⟳ Loading 3D mandible model…</div>
+      <model-viewer id="mandible-model" camera-controls interaction-prompt="none" shadow-intensity="1">
+        <div class="mv-loading">Loading 3D Model...</div>
       </model-viewer>
-      <div class="mv-error" id="mv-error">
-        ⚠ Could not load the 3D model.<br>
-        <span style="font-size:11px;color:#94a3b8">Check that the .glb files are in the same folder as this HTML file.</span>
-      </div>
-    </div>
-
-    <table id="anatomy-table">
-      <colgroup><col style="width:50px"><col style="width:100%"></colgroup>
-      <thead><tr><th class="td-center">Pin</th><th>Anatomical Part / Landmark</th></tr></thead>
-      <tbody id="anatomy-table-body">
-        <tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic; padding:12px;">Click on the 3D model to place a pin.</td></tr>
-      </tbody>
-    </table>
-    <img id="snapshot-print" alt="3D mandible snapshot with pins">
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="step-badge">Step 2</span> Progressive 12-Point Assessment</div>
-
-    <div class="pf-item">
-      <div class="pf-label">1. Is it a bone or not? <button id="btn-bone" class="viva-btn" onclick="openViva('bone', 'in-bone')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-bone" class="sel-ok" oninput="showFollowUp('fu-bone'); checkUnlock(this, 'btn-bone')">
-      <div id="fu-bone" class="pf-followup">
-        <div class="pf-followup-label">↳ How do you prove this?</div>
-        <input type="text" class="sel-ok">
-      </div>
-    </div>
-
-    <div class="pf-item">
-      <div class="pf-label">2. Name of Bone(s) <button id="btn-name" class="viva-btn" onclick="openViva('name', 'in-name')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-name" class="sel-ok" oninput="checkUnlock(this, 'btn-name')">
-    </div>
-
-    <div class="pf-item">
-      <div class="pf-label">3. Whether human or not? <button id="btn-human" class="viva-btn" onclick="openViva('human', 'in-human')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-human" class="sel-ok" oninput="showFollowUp('fu-human'); checkUnlock(this, 'btn-human')">
-      <div id="fu-human" class="pf-followup">
-        <div class="pf-followup-label">↳ How do you prove it is human?</div>
-        <input type="text" class="sel-ok">
-      </div>
-    </div>
-
-    <div class="pf-item">
-      <div class="pf-label">4. Whether belonging to one individual or more? <button id="btn-number" class="viva-btn" onclick="openViva('number', 'in-number')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-number" class="sel-ok" oninput="checkUnlock(this, 'btn-number')">
-    </div>
-
-    <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">5. Sex Determination
-        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-          <span class="viva-hint" id="hint-sex">Type conclusion to unlock ➜</span>
-          <button id="btn-chin" class="viva-btn" onclick="openViva('chin', 'in-sex-concl')" disabled>❓ Viva</button>
-          <button id="btn-gonial" class="viva-btn" onclick="openViva('gonial', 'in-sex-concl')" disabled>❓ Viva</button>
-          <button id="btn-ramus" class="viva-btn" onclick="openViva('ramus', 'in-sex-concl')" disabled>❓ Viva</button>
-          <button id="btn-tubercle" class="viva-btn" onclick="openViva('tubercle', 'in-sex-concl')" disabled>❓ Viva</button>
-        </div>
-      </div>
-      <table id="sex-table">
-        <colgroup><col style="width:40px"><col style="width:40%"><col style="width:30%"><col style="width:30%"><col class="del-col" style="width:30px"></colgroup>
-        <thead><tr><th class="td-center">S.No</th><th>Trait Analyzed</th><th>Male Param.</th><th>Female Param.</th><th class="del-col"></th></tr></thead>
-        <tbody id="sex-table-body"></tbody>
-      </table>
-      <button class="btn btn-sm" onclick="addRow('sex-table-body', 4)">＋ Add Row</button>
-      <div style="margin-top:12px;">
-        <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (SEX):</label>
-        <input type="text" id="in-sex-concl" class="sel-ok" oninput="checkUnlock(this, ['btn-chin', 'btn-gonial', 'btn-ramus', 'btn-tubercle'])">
-      </div>
-    </div>
-
-    <div class="pf-item" style="border-color: #3b82f6;">
-      <div class="pf-label" style="color:#60a5fa;">6. Age Estimation
-        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-          <span class="viva-hint" id="hint-age">Type conclusion to unlock ➜</span>
-          <button id="btn-age" class="viva-btn" onclick="openViva('age', 'in-age-concl')" disabled>❓ Viva</button>
-          <button id="btn-thirdmolar" class="viva-btn" onclick="openViva('thirdmolar', 'in-age-concl')" disabled>❓ Viva</button>
-        </div>
-      </div>
-      <table id="age-table">
-        <colgroup><col style="width:40px"><col style="width:40%"><col style="width:60%"><col class="del-col" style="width:30px"></colgroup>
-        <thead><tr><th class="td-center">S.No</th><th>Feature / Marker Analyzed</th><th>Observation &amp; Interpretation</th><th class="del-col"></th></tr></thead>
-        <tbody id="age-table-body"></tbody>
-      </table>
-      <button class="btn btn-sm" onclick="addRow('age-table-body', 3)">＋ Add Row</button>
-      <div style="margin-top:12px;">
-        <label style="font-size:11px; color:#94a3b8; font-weight:700;">CONCLUSION (AGE):</label>
-        <input type="text" id="in-age-concl" class="sel-ok" oninput="checkUnlock(this, ['btn-age','btn-thirdmolar'])">
-      </div>
-    </div>
-
-    <div class="pf-item"><div class="pf-label">7. Stature</div><input type="text" class="sel-ok"></div>
-    <div class="pf-item"><div class="pf-label">8. Race</div><input type="text" class="sel-ok"></div>
-    <div class="pf-item">
-      <div class="pf-label">9. Specific Identification <button id="btn-ident" class="viva-btn" onclick="openViva('ident', 'in-ident')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-ident" class="sel-ok" oninput="checkUnlock(this, 'btn-ident')">
-    </div>
-    <div class="pf-item">
-      <div class="pf-label">10. Probable Cause of Death <button id="btn-cod" class="viva-btn" onclick="openViva('cod', 'in-cod')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-cod" class="sel-ok" oninput="checkUnlock(this, 'btn-cod')">
-    </div>
-
-    <div class="pf-item">
-      <div class="pf-label">11. Probable Time Since Death <button id="btn-time" class="viva-btn" onclick="openViva('time', 'in-time')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-time" class="sel-ok" oninput="showFollowUp('fu-time'); checkUnlock(this, 'btn-time')">
-      <div id="fu-time" class="pf-followup">
-        <div class="pf-followup-label">↳ Explain why this indicates this time since death</div>
-        <input type="text" class="sel-ok">
-      </div>
-    </div>
-
-    <div class="pf-item">
-      <div class="pf-label">12. Manner of Separation <button id="btn-sep" class="viva-btn" onclick="openViva('sep', 'in-sep')" disabled>❓ Viva</button></div>
-      <input type="text" id="in-sep" class="sel-ok" oninput="showFollowUp('fu-sep'); checkUnlock(this, 'btn-sep')">
-      <div id="fu-sep" class="pf-followup">
-        <div class="pf-followup-label">↳ How do you differentiate rodent damage from carnivore damage?</div>
-        <input type="text" class="sel-ok">
-      </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="step-badge">Step 3</span> Final Opinion</div>
-    <textarea class="sel-ok" id="final-opinion"></textarea>
-    <div style="display:flex; gap:16px; margin-top:20px;">
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">STUDENT SIGNATURE</label><input type="text"></div>
-      <div style="flex:1;"><label style="font-size:10px; color:#64748b; font-weight:700;">FACULTY SIGNATURE</label><input type="text"></div>
+    <div class="card-title"><span class="step-badge">Assessment</span></div>
+    <div class="pf-item">
+      <div>1. Name of Bone <button class="viva-btn" onclick="alert('The mandible is the only movable bone of the skull.')">❓ Viva</button></div>
+      <input type="text" class="sel-ok">
     </div>
-    <div id="ts-bar" style="margin-top:16px;padding-top:12px;border-top:1px solid #334155;font-size:11px;color:#64748b;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"></div>
-  </div>
-
-  <button class="btn btn-primary" style="width:100%;padding:14px;justify-content:center" onclick="finalizeSubmission()">🖨 Finalize &amp; Save as PDF</button>
-</div>
-
-<div id="viva-modal">
-  <div class="viva-box">
-    <button class="close-modal" onclick="closeViva()">✕</button>
-    <div id="viva-question" class="viva-q">Question text goes here?</div>
-    <button id="btn-reveal" class="btn-reveal" onclick="revealAnswer()">Reveal Answer</button>
-    <div id="viva-answer-box" class="viva-answer-box">
-      <div class="viva-a-title">Correct Answer:</div>
-      <div id="viva-answer-text" class="viva-a-text"></div>
+    <div class="pf-item">
+      <div>2. Sex Determination Conclusion</div>
+      <input type="text" class="sel-ok">
     </div>
+    <div class="pf-item">
+      <div>3. Age Estimation Conclusion</div>
+      <input type="text" class="sel-ok">
+    </div>
+    <button class="btn" onclick="window.print()">🖨 Save as PDF</button>
   </div>
 </div>
 
 <script>
 // ==========================================
-// CONFIGURATION
+// CORRECTED PATHS
 // ==========================================
-const FACULTY_PIN = '2593';
-const EXAM_SECONDS = 20 * 60; // 20 minutes
+const EXAM_PIN = '8842'; 
 
-// 3D MODELS ARRAY (Point these directly to your GitHub URLs)
+// Use './' to look in the local folder on GitHub Pages
 const MANDIBLE_MODELS = [
-  { id: 'Model A', file: 'https://raulfp21.github.io/xray-age-estimation/mandible1.glb', desc: 'Mandible Specimen 1' },
-  { id: 'Model B', file: 'https://raulfp21.github.io/xray-age-estimation/mandible2.glb', desc: 'Mandible Specimen 2' }
+  { id: 'Model A', file: './mandible1.glb', desc: 'Mandible Specimen 1' },
+  { id: 'Model B', file: './mandible2.glb', desc: 'Mandible Specimen 2' }
 ];
-
-let assignedModel = null;
-let isFaculty = false;
-let startTime = null;
-let timerInterval = null;
-let secondsLeft = EXAM_SECONDS;
-
-// Violations
-let violations = [];
-let tabSwitchCount = 0, fsExitCount = 0, devtoolsCount = 0, devtoolsOpen = false;
-
-function timeStr() { return new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}); }
-function flashRed() { const ov = document.getElementById('viol-overlay'); ov.style.display = 'block'; setTimeout(() => { ov.style.display = 'none'; }, 600); }
-function logViolation(msg) {
-  violations.push(msg);
-  const banner = document.getElementById('viol-banner');
-  const list = document.getElementById('viol-list');
-  banner.style.display = 'block';
-  list.innerHTML = violations.map(v => '<br>• ' + v).join('');
-}
-
-// ── Anti-Cheat ─────────────────────────────────────────────
-window.addEventListener('beforeunload', function (e) {
-  if (assignedModel && !isFaculty && secondsLeft > 0) {
-    e.preventDefault();
-    e.returnValue = ''; 
-  }
-});
-document.addEventListener('visibilitychange', () => {
-  if (isFaculty || !startTime) return;
-  if (document.hidden) {
-    tabSwitchCount++;
-    logViolation('Tab / window switch #' + tabSwitchCount + ' at ' + timeStr());
-    flashRed();
-  }
-});
-function requestFS() {
-  const el = document.documentElement;
-  if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
-  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-}
-document.addEventListener('fullscreenchange', () => {
-  if (isFaculty || !startTime) return;
-  if (!document.fullscreenElement) {
-    fsExitCount++;
-    logViolation('Exited fullscreen #' + fsExitCount + ' at ' + timeStr());
-    flashRed();
-    setTimeout(requestFS, 800);
-  }
-});
-
-setInterval(() => {
-  if (isFaculty || !startTime) return;
-  const t = performance.now();
-  debugger;
-  const diff = performance.now() - t;
-  const open = diff > 80;
-  if (open && !devtoolsOpen) {
-    devtoolsOpen = true;
-    devtoolsCount++;
-    logViolation('DevTools opened #' + devtoolsCount + ' at ' + timeStr());
-    flashRed();
-  } else if (!open) { devtoolsOpen = false; }
-}, 1500);
-
-document.addEventListener('contextmenu', e => {
-  if (isFaculty) return;
-  if (e.target.tagName === 'IMG' || e.target.tagName === 'MODEL-VIEWER') { e.preventDefault(); return false; }
-});
-
-['copy','cut','paste'].forEach(ev => {
-  document.addEventListener(ev, e => {
-    if (isFaculty) return;
-    const tag = e.target.tagName;
-    if ((tag === 'TEXTAREA' || tag === 'INPUT')) {
-      if (!e.target.classList.contains('sel-ok')) {
-        e.preventDefault();
-      }
-    }
-  });
-});
-
-// ── Faculty Dashboard Logic ────────────────────────────────
-function switchTab(tab) {
-  document.getElementById('tab-student').style.display = tab === 'student' ? 'block' : 'none';
-  document.getElementById('tab-faculty').style.display = tab === 'faculty' ? 'block' : 'none';
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0) === (tab==='student')));
-}
-
-function unlockStudent() {
-  const val = document.getElementById('lock-roll').value.trim();
-  const n = parseInt(val);
-  const err = document.getElementById('lock-error');
-  if (!val || isNaN(n) || n < 1 || n > 251) {
-    err.textContent = 'Please enter a valid roll number between 1 and 251.';
-    return;
-  }
-  if (localStorage.getItem('ospe_completed_mand_' + n)) {
-    err.textContent = 'Access Denied: Already completed.';
-    return;
-  }
-  err.textContent = '';
-  isFaculty = false;
-  assignedModel = assignModel(n);
-  document.getElementById('s-roll').value = n;
-  localStorage.setItem('ospe_started_mand_' + n, 'true');
-  launch();
-  startTimer();
-  setTimeout(requestFS, 300);
-}
 
 function assignModel(roll) {
   let n = parseInt(roll);
   n = ((n * 2654435761) ^ (n >> 16)) >>> 0;
-  n = (n ^ (n * 1597334677)) >>> 0;
   return MANDIBLE_MODELS[n % MANDIBLE_MODELS.length];
 }
 
-function unlockFaculty() {
-  const pin = document.getElementById('faculty-pin').value.trim();
-  const err = document.getElementById('faculty-error');
-  if (pin !== FACULTY_PIN) { err.textContent = 'Incorrect PIN.'; return; }
-  err.textContent = '';
-  const val = document.getElementById('faculty-roll').value.trim();
-  const n = parseInt(val);
-  isFaculty = true;
-  assignedModel = val ? assignModel(n) : MANDIBLE_MODELS[0];
-  document.getElementById('s-roll').value = val ? n + ' (Faculty Preview)' : 'Faculty Preview';
-  document.getElementById('preview-badge').style.display = 'inline-block';
-  document.getElementById('timer-bar').style.opacity = '0.4';
-  document.getElementById('timer-label').textContent = 'Timer disabled (Faculty)';
-  launch();
-}
-
-function launch() {
+function unlockStudent() {
+  const roll = document.getElementById('lock-roll').value;
+  const pin = document.getElementById('student-exam-pin').value;
+  
+  if (pin !== EXAM_PIN) { alert('Incorrect PIN!'); return; }
+  
+  const assigned = assignModel(roll);
+  document.getElementById('assign-main').innerText = assigned.desc;
+  
+  const mv = document.getElementById('mandible-model');
+  mv.src = assigned.file; 
+  
   document.getElementById('lock-overlay').style.display = 'none';
   document.getElementById('main-content').style.display = 'block';
-  const d = new Date();
-  document.getElementById('s-date').value = d.toISOString().slice(0,10);
-  const ab = document.getElementById('assign-box');
-  ab.style.display = 'block';
-  document.getElementById('assign-main').textContent = assignedModel.desc;
-  const mv = document.getElementById('mandible-model');
-  mv.src = assignedModel.file;
-}
-
-function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(tickTimer, 1000);
-  tickTimer();
-}
-function tickTimer() {
-  secondsLeft = EXAM_SECONDS - Math.floor((Date.now() - startTime) / 1000);
-  if (secondsLeft < 0) secondsLeft = 0;
-  const m = Math.floor(secondsLeft / 60).toString().padStart(2,'0');
-  const s = (secondsLeft % 60).toString().padStart(2,'0');
-  const disp = document.getElementById('timer-display');
-  const fill = document.getElementById('timer-fill');
-  disp.textContent = m + ':' + s;
-  fill.style.width = (secondsLeft / EXAM_SECONDS * 100) + '%';
-  disp.className = secondsLeft <= 120 ? 'danger' : secondsLeft <= 300 ? 'warn' : '';
-  if (secondsLeft === 0) {
-    clearInterval(timerInterval);
-    logViolation('⏰ Time expired — exam ended at ' + timeStr());
-    if (!isFaculty) localStorage.setItem('ospe_completed_mand_' + document.getElementById('s-roll').value, 'true');
-    alert('Time is up!');
-  }
-}
-
-// --- 3D MODEL LOADING STATE ---
-const modelViewer = document.getElementById('mandible-model');
-const mvLoading = document.getElementById('mv-loading');
-const mvError = document.getElementById('mv-error');
-modelViewer.addEventListener('load', () => { if (mvLoading) mvLoading.style.display = 'none'; });
-modelViewer.addEventListener('error', () => {
-  if (mvLoading) mvLoading.style.display = 'none';
-  mvError.style.display = 'flex';
-});
-
-// --- 3D PIN LOGIC ---
-const anatomyBody = document.getElementById('anatomy-table-body');
-let pinCount = 0;
-modelViewer.addEventListener('click', (event) => {
-  if (event.target.classList.contains('pin')) return;
-  const hit = modelViewer.positionAndNormalFromPoint(event.clientX, event.clientY);
-  if (hit != null) {
-    pinCount++;
-    const pinId = 'pin-' + pinCount;
-    const emptyRow = document.getElementById('empty-anatomy-row');
-    if (emptyRow) emptyRow.remove();
-    const pin = document.createElement('button');
-    pin.className = 'pin'; pin.slot = 'hotspot-' + pinCount;
-    pin.dataset.position = hit.position.toString(); pin.dataset.normal = hit.normal.toString();
-    pin.innerText = pinCount; pin.id = pinId;
-    pin.onclick = (e) => {
-      e.stopPropagation(); pin.remove();
-      const row = document.getElementById('row-' + pinId);
-      if (row) row.remove();
-      renumberAnatomy();
-    };
-    modelViewer.appendChild(pin);
-    const tr = document.createElement('tr'); tr.id = 'row-' + pinId;
-    tr.innerHTML = `<td class="td-center anatomy-num">${pinCount}</td><td><input type="text" class="sel-ok"></td>`;
-    anatomyBody.appendChild(tr);
-    renumberAnatomy();
-  }
-});
-
-function renumberAnatomy() {
-  const rows = anatomyBody.querySelectorAll('tr[id^="row-pin-"]');
-  if (rows.length === 0) {
-    anatomyBody.innerHTML = '<tr id="empty-anatomy-row"><td colspan="2" style="text-align:center; color:#64748b; font-style:italic;">Click on the 3D model to place a pin.</td></tr>';
-    pinCount = 0;
-  } else {
-    rows.forEach((row, index) => {
-      row.querySelector('.anatomy-num').innerText = index + 1;
-      const pinId = row.id.replace('row-', '');
-      const pinEl = document.getElementById(pinId);
-      if (pinEl) pinEl.innerText = index + 1;
-    });
-  }
-}
-
-function showFollowUp(id) {
-  const el = document.getElementById(id);
-  if (el && el.style.display !== 'block') el.style.display = 'block';
-}
-
-function addRow(tbodyId, cols) {
-  const tbody = document.getElementById(tbodyId);
-  const tr = document.createElement('tr');
-  let html = `<td class="td-center row-num">${tbody.children.length + 1}</td>`;
-  for (let i=1; i < cols-1; i++) html += `<td><input type="text" class="sel-ok"></td>`;
-  html += `<td class="del-col"><button class="del-btn" onclick="deleteRow(this, '${tbodyId}')" title="Remove row">✕</button></td>`;
-  tr.innerHTML = html; tbody.appendChild(tr); renumberTable(tbodyId);
-}
-function deleteRow(btn, tbodyId) { btn.closest('tr').remove(); renumberTable(tbodyId); }
-function renumberTable(tbodyId) {
-  Array.from(document.getElementById(tbodyId).children).forEach((row, index) => {
-    const numCell = row.querySelector('.row-num');
-    if (numCell) numCell.innerText = index + 1;
-  });
-}
-
-// --- VIVA UNLOCK LOGIC ---
-function checkUnlock(inputElement, btnIds) {
-  if (inputElement.readOnly) return; 
-  const hasText = inputElement.value.trim().length > 0;
-  const idsToUnlock = Array.isArray(btnIds) ? btnIds : [btnIds];
-  idsToUnlock.forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) btn.disabled = !hasText;
-  });
-  if (idsToUnlock.includes('btn-chin')) {
-    const hint = document.getElementById('hint-sex');
-    if (hint) hint.style.display = hasText ? 'none' : 'inline';
-  }
-  if (idsToUnlock.includes('btn-age')) {
-    const hint = document.getElementById('hint-age');
-    if (hint) hint.style.display = hasText ? 'none' : 'inline';
-  }
-}
-
-// --- VIVA QUESTION BANK ---
-const vivaQuestions = {
-  bone: { q: "How do you definitively confirm that a small, dirty fragment is actually a human bone and not a stone or piece of wood?", a: "Histological examination reveals Haversian systems unique to bone. Bone also has a specific gravity of about 2." },
-  name: { q: "What anatomical landmarks would you use to confirm this bone is a mandible?", a: "Horseshoe body, symphysis menti, mental foramen, and condyloid/coronoid processes." },
-  human: { q: "If a bone is old and dry, how do you differentiate it from a non-human animal bone?", a: "Microscopic examination reveals Haversian systems in humans vs. plexiform structures in most animals." },
-  number: { q: "If several mandibular fragments are found together, how would you determine if they belong to one individual or more?", a: "Reconstruct the fragments; look for reduplication of parts (e.g., two left condyles) or inconsistency in size/age." },
-  chin: { q: "Describe the chin shape between male and female mandibles.", a: "Male: Broad, square (U-shaped). Female: Narrower and rounded." },
-  gonial: { q: "Describe the gonial angle in males versus females.", a: "Male: Under 125°, everted. Female: More obtuse, inverted or straight." },
-  ramus: { q: "How does the ascending ramus help distinguish sex?", a: "Males have greater breadth and robustness compared to the narrower female ramus." },
-  tubercle: { q: "What is the mental tubercle?", a: "A bony prominence near the chin. Prominent in males; insignificant in females." },
-  age: { q: "How does the position of the mental foramen change with age?", a: "Infancy: Near lower margin. Adult: Midway. Old age: Near upper (alveolar) margin due to resorption." },
-  thirdmolar: { q: "Third molar significance?", a: "Eruption usually indicates age >17 years." },
-  ident: { q: "Besides teeth, what other features establish identity?", a: "Old fractures, surgical implants, unique pathology, or dental records." },
-  cod: { q: "Can you determine cause of death from mandible?", a: "Rarely, unless there is direct trauma evidence like fractures or tool marks." },
-  time: { q: "Time since death markers?", a: "Recent: greasy, heavy. Ancient: dry, brittle, chalky." },
-  sep: { q: "Rodent vs Carnivore damage?", a: "Rodent: Parallel grooves (chisel marks). Carnivore: Punctures, pits, and furrows." }
-};
-
-const modal = document.getElementById('viva-modal');
-const qBox = document.getElementById('viva-question');
-const aBox = document.getElementById('viva-answer-box');
-const aText = document.getElementById('viva-answer-text');
-const revealBtn = document.getElementById('btn-reveal');
-
-let currentTrait = '';
-let currentInputId = '';
-
-function openViva(traitId, inputId) {
-  currentTrait = traitId;
-  currentInputId = inputId;
-  qBox.innerText = vivaQuestions[traitId].q;
-  aBox.style.display = 'none';
-  revealBtn.style.display = 'inline-block';
-  modal.style.display = 'flex';
-}
-function revealAnswer() {
-  aText.innerText = vivaQuestions[currentTrait].a;
-  revealBtn.style.display = 'none';
-  aBox.style.display = 'block';
-  if (currentInputId) {
-    const inp = document.getElementById(currentInputId);
-    if (inp && !inp.readOnly) {
-      inp.readOnly = true;
-      inp.classList.add('sel-locked');
-    }
-  }
-}
-function closeViva() { modal.style.display = 'none'; }
-
-function finalizeSubmission() {
-  const name = document.getElementById('s-name').value.trim();
-  const roll = document.getElementById('s-roll').value.trim();
-  if (!isFaculty && !name) { alert('Please enter your name.'); return; }
-  const now = new Date();
-  const ts = now.toLocaleString('en-IN', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-  const elapsed = startTime ? Math.floor((Date.now() - startTime) / 60000) : null;
-  if (!isFaculty) localStorage.setItem('ospe_completed_mand_' + roll, 'true');
-  const tsBar = document.getElementById('ts-bar');
-  let violText = violations.length ? `<span style="color:#fca5a5"><strong>⚠ ${violations.length} violation(s)</strong></span>` : `<span style="color:#86efac">✓ No violations</span>`;
-  tsBar.innerHTML = `<span><strong>Submitted:</strong> ${ts}</span><span>Roll: ${roll} | Time: ${elapsed !== null ? elapsed + 'm' : 'N/A'}</span><span>${violText}</span>`;
-  try {
-    const dataUrl = modelViewer.toDataURL('image/png');
-    const imgEl = document.getElementById('snapshot-print');
-    imgEl.src = dataUrl;
-  } catch (e) { console.warn('3D snapshot failed:', e); }
-  setTimeout(() => window.print(), 200);
 }
 </script>
 </body>
-  </html>
+</html>
