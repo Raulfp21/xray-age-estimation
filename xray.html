@@ -493,12 +493,12 @@ function unlockStudent() {
   const err = document.getElementById('lock-error');
   if (!val || isNaN(n) || n < 1 || n > 251) return err.textContent = 'Invalid roll number.';
   if (!checkTimeWindow(err)) return;
-  if (localStorage.getItem('ospe_completed_' + n)) return err.textContent = 'Exam already completed.';
+  if (localStorage.getItem('ospe_completed_day2_' + n)) return err.textContent = 'Exam already completed.';
   
   isFaculty = false; studentRoll = n;
   assignedQ = assignQuestion(n);
   document.getElementById('s-roll').value = n;
-  localStorage.setItem('ospe_started_' + n, 'true');
+  localStorage.setItem('ospe_started_day2_' + n, 'true');
   launch(); startTimer();
 }
 
@@ -531,7 +531,7 @@ function startTimer() {
     document.getElementById('timer-fill').style.width = ((secondsLeft / EXAM_SECONDS) * 100) + '%';
     if (secondsLeft === 0) {
       clearInterval(timerInterval);
-      if (!isFaculty) localStorage.setItem('ospe_completed_' + studentRoll, 'true');
+      if (!isFaculty) localStorage.setItem('ospe_completed_day2_' + studentRoll, 'true');
       alert('Time is up! Save PDF.');
     }
   }, 1000);
@@ -571,12 +571,9 @@ function delRow(uid) {
   const tr = document.getElementById('row-' + uid);
   if (tr) tr.remove();
   
-  // Deleting the row also automatically deletes the linked pins on all images
   Object.keys(pins).forEach(idx => { pins[idx] = pins[idx].filter(p => p.uid !== uid); });
   if (activeRowUID === uid) { activeRowUID = null; toggleWorkspaceMode('mark'); }
-  
-  syncTableDisplay(); 
-  renderAllPins();
+  syncTableDisplay(); renderAllPins();
 }
 
 function syncTableDisplay() {
@@ -605,7 +602,7 @@ function activateRow(uid) {
   document.getElementById('xray-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── X-RAY ENGINE (ZERO LATENCY & GHOST PINS) ────────────────
+// ── X-RAY ENGINE (ZERO LATENCY POINTERDOWN) ────────────────
 
 function gdUrl(fileId) { return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w800'; }
 
@@ -699,8 +696,6 @@ function loadXrays() {
       // INSTANT MARKING
       if (workspaceMode === 'mark') {
         if (!activeRowUID) return showToast("⚠ Please select a row in the table below first!");
-        
-        // Notice we no longer check for overlapping pins because pins are completely unclickable "ghosts"
 
         const rect = imgEl.getBoundingClientRect();
         const pctX = ((e.clientX - rect.left) / rect.width) * 100;
@@ -784,7 +779,6 @@ function loadXrays() {
 }
 
 function processPinDrop(imgIdx, uid, pctX, pctY) {
-  // If the user already placed a pin for this row on this image, it updates the coordinates (moves it)
   let existingPin = pins[imgIdx].find(p => p.uid === uid);
   if (existingPin) { existingPin.pctX = pctX; existingPin.pctY = pctY; } 
   else { pins[imgIdx].push({ uid: uid, pctX: pctX, pctY: pctY }); }
@@ -839,7 +833,7 @@ function buildPDF() {
   const ts = new Date().toLocaleString('en-IN');
   const elapsed = startTime ? Math.floor((Date.now() - startTime) / 60000) : null;
 
-  if (!isFaculty) { localStorage.setItem('ospe_completed_' + studentRoll, 'true'); }
+  if (!isFaculty) { localStorage.setItem('ospe_completed_day2_' + studentRoll, 'true'); }
 
   const imgTags = q.images.map((img, idx) => {
     const po = (pins[idx] || []).map(p => {
