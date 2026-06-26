@@ -62,7 +62,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;color:#e2e8f0;fo
 .xray-outer{position:relative;overflow:hidden;background:#000;border-radius:8px;border:1px solid #334155;height:420px;cursor:crosshair;}
 .xray-inner{position:absolute;top:0;left:0;width:100%;height:100%;transform-origin:0 0;will-change:transform}
 .xray-inner img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none}
-.pin-layer{position:absolute;inset:0;pointer-events:none}
+
+/* The tight bounding box layer for exact mathematics */
+.pin-layer{position:absolute; pointer-events:none; transition: all 0.1s;}
+
 .xray-label{position:absolute;top:7px;left:7px;background:rgba(0,0,0,0.7);color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;pointer-events:none;z-index:3}
 .zoom-hint{position:absolute;bottom:6px;right:7px;background:rgba(0,0,0,0.55);color:#94a3b8;font-size:9px;padding:2px 7px;border-radius:4px;pointer-events:none;z-index:3}
 
@@ -602,7 +605,32 @@ function activateRow(uid) {
   document.getElementById('xray-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── X-RAY ENGINE (ZERO LATENCY POINTERDOWN) ────────────────
+// ── MATHEMATICAL TIGHT-WRAP ENGINE (FIXES PDF DRIFT) ────────
+
+// Dynamically scales the pin-layer to match the rendered image ignoring black bars
+function updatePinLayerBounds(imgEl, pinLayer, inner) {
+  if (!imgEl.naturalWidth) return;
+  const cW = inner.offsetWidth;
+  const cH = inner.offsetHeight;
+  if (cW === 0 || cH === 0) return;
+
+  const cRatio = cW / cH;
+  const iRatio = imgEl.naturalWidth / imgEl.naturalHeight;
+
+  if (cRatio > iRatio) {
+    const pctW = ((cH * iRatio) / cW) * 100;
+    pinLayer.style.width = pctW + '%';
+    pinLayer.style.height = '100%';
+    pinLayer.style.left = ((100 - pctW) / 2) + '%';
+    pinLayer.style.top = '0%';
+  } else {
+    const pctH = ((cW / iRatio) / cH) * 100;
+    pinLayer.style.width = '100%';
+    pinLayer.style.height = pctH + '%';
+    pinLayer.style.left = '0%';
+    pinLayer.style.top = ((100 - pctH) / 2) + '%';
+  }
+}
 
 function gdUrl(fileId) { return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w800'; }
 
@@ -641,21 +669,29 @@ function loadXrays() {
     imgEl.draggable = false;
     imgEl.style.display = 'none'; 
     
+    const pinLayer = document.createElement('div');
+    pinLayer.className = 'pin-layer'; pinLayer.id = 'pin-layer-' + idx;
+
     imgEl.onload = () => {
       ld.style.display = 'none'; 
       imgEl.style.display = 'block';
       document.getElementById('xray-area').style.display = '';
       document.getElementById('no-xray').style.display = 'none';
+      updatePinLayerBounds(imgEl, pinLayer, inner);
     };
+    
+    // Recalculate bounds if device rotates or screen resizes
+    if (window.ResizeObserver) {
+      new ResizeObserver(() => updatePinLayerBounds(imgEl, pinLayer, inner)).observe(inner);
+    }
+
     imgEl.onerror = () => { 
       ld.textContent = '⚠ Could not load assets correctly. Check internet connection.'; 
     };
     
     imgEl.src = gdUrl(img.fileId); 
+    
     inner.appendChild(imgEl);
-
-    const pinLayer = document.createElement('div');
-    pinLayer.className = 'pin-layer'; pinLayer.id = 'pin-layer-' + idx;
     inner.appendChild(pinLayer);
     outer.appendChild(inner);
 
@@ -693,15 +729,17 @@ function loadXrays() {
 
     // ── SUPER RESPONSIVE POINTER ENGINE ──
     outer.addEventListener('pointerdown', e => {
-      // INSTANT MARKING
       if (workspaceMode === 'mark') {
         if (!activeRowUID) return showToast("⚠ Please select a row in the table below first!");
 
-        const rect = imgEl.getBoundingClientRect();
-        const pctX = ((e.clientX - rect.left) / rect.width) * 100;
-        const pctY = ((e.clientY - rect.top) / rect.height) * 100;
+        const rect = pinLayer.getBoundingClientRect();
         
-        if (pctX >= 0 && pctX <= 100 && pctY >= 0 && pctY <= 100) {
+        // Ensure click is inside the tightly wrapped pinLayer (ignores black bars)
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+
+          const pctX = ((e.clientX - rect.left) / rect.width) * 100;
+          const pctY = ((e.clientY - rect.top) / rect.height) * 100;
           processPinDrop(idx, activeRowUID, pctX, pctY);
         }
         return; 
@@ -799,7 +837,6 @@ function renderAllPins() {
       const mappedRow = rowData.find(r => r.uid === p.uid);
       if (!mappedRow) return; 
       
-      // Creating the Ghost Pin
       const el = document.createElement('div');
       el.className = 'pin'; 
       el.style.left = p.pctX + '%'; el.style.top = p.pctY + '%';
@@ -844,7 +881,16 @@ function buildPDF() {
         <div style="position:absolute;top:-10px;left:6px;color:#ef4444;font-size:10px;font-weight:bold;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;font-family:monospace;">${sNum}</div>
       </div>`;
     }).join('');
-    return `<div style="display:inline-block;position:relative;margin-right:8px;margin-bottom:8px;vertical-align:top"><img src="${gdUrl(img.fileId)}" style="max-width:320px;max-height:280px;border:1px solid #ccc;display:block" alt="${img.title}">${po}<div style="font-size:10px;color:#555;margin-top:3px">${img.title}</div></div>`;
+    
+    // PDF Wrapper Fix: The inner relative div tightly fits the image, making the absolute pin-layer perfectly map the live view coords.
+    return `
+    <div style="display:inline-block; margin-right:8px; margin-bottom:12px; vertical-align:top;">
+      <div style="position:relative; display:inline-block; border:1px solid #ccc; background:#000; overflow:hidden;">
+        <img src="${gdUrl(img.fileId)}" style="max-width:320px; max-height:280px; display:block" alt="${img.title}">
+        <div style="position:absolute; inset:0; pointer-events:none;">${po}</div>
+      </div>
+      <div style="font-size:10px; color:#555; margin-top:3px">${img.title}</div>
+    </div>`;
   }).join('');
 
   const tableRows = rows.map(r => `<tr><td style="text-align:center;padding:5px 4px;border:1px solid #ccc">${r.sno}</td><td style="padding:5px 7px;border:1px solid #ccc">${r.name||'—'}</td><td style="padding:5px 7px;border:1px solid #ccc">${r.app||'—'}</td><td style="padding:5px 7px;border:1px solid #ccc">${r.fus||'—'}</td><td style="padding:5px 7px;border:1px solid #ccc;white-space:pre-wrap">${r.obs||'—'}</td><td style="padding:5px 7px;border:1px solid #ccc;white-space:pre-wrap">${r.inf||'—'}</td></tr>`).join('');
